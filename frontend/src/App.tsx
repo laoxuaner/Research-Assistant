@@ -56,6 +56,9 @@ import {
   Reader,
   Spinner,
   statusLabel,
+  ReadOnlyDemoContext,
+  useReadOnlyDemo,
+  demoReadOnlyHint,
 } from "./components";
 import Experiments from "./Experiments";
 type Page =
@@ -151,7 +154,9 @@ export default function App() {
     return () => clearInterval(t);
   }, [pid, papers]);
   const project = projects.find((p) => p.id === pid);
+  const readOnly = settings?.read_only === true;
   const importDemo = async () => {
+    if (readOnly) return;
     setDemoBusy(true);
     try {
       const r = await api<{ project_id: string }>("/demo", json({}));
@@ -178,352 +183,395 @@ export default function App() {
     setEdit(null);
   };
   return (
-    <div className="app">
-      <aside className={"sidebar " + (mobile ? "mobile-open" : "")}>
-        <a
-          className="brand"
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate("overview");
-          }}
-        >
-          <div className="brand-mark">
-            <Layers size={24} />
-          </div>
-          <div>
-            <strong>
-              研知<span>LAB</span>
-            </strong>
-            <small>RESEARCH WORKSPACE</small>
-          </div>
-        </a>
-        <div className="workspace-label">
-          个人科研工作台 <Badge>LOCAL</Badge>
-        </div>
-        <nav>
-          {nav.map((n) => (
-            <button
-              className={page === n.id ? "nav-item active" : "nav-item"}
-              key={n.id}
-              onClick={() => navigate(n.id)}
-            >
-              <n.icon size={18} />
-              {n.name}
-              {n.id === "papers" && papers.length > 0 && (
-                <span className="nav-count">{papers.length}</span>
-              )}
-            </button>
-          ))}
-        </nav>
-        <div className="sidebar-bottom">
-          <div className="local-card">
-            <div className="row">
-              <span className="status-dot" />
-              <strong>本地工作空间</strong>
-            </div>
-            <p>
-              原始资料保存在你的设备。
-              <br />
-              AI 外发由你明确开启。
-            </p>
-          </div>
-          <button
-            className={"nav-item " + (page === "settings" ? "active" : "")}
-            onClick={() => navigate("settings")}
-          >
-            <SettingsIcon size={18} />
-            模型与设置
-          </button>
-          <div className="user-row">
-            <div className="avatar">研</div>
-            <div>
-              <strong>我的研究</strong>
-              <small>个人 · 单用户</small>
-            </div>
-            <span className="local-pill">本地</span>
-          </div>
-        </div>
-      </aside>
-      {mobile && (
-        <div className="mobile-mask" onClick={() => setMobile(false)} />
-      )}
-      <div className="workspace">
-        <header className="topbar">
-          <button
-            className="icon-button mobile-menu"
-            aria-label="打开导航"
-            onClick={() => setMobile(!mobile)}
-          >
-            <Menu size={21} />
-          </button>
-          <div className="project-switch">
-            <FolderOpen size={17} />
-            <select
-              aria-label="当前科研项目"
-              value={pid}
-              onChange={(e) => setPid(e.target.value)}
-            >
-              <option value="">选择科研项目</option>
-              {projects.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name}
-                  {p.archived ? "（已归档）" : ""}
-                </option>
-              ))}
-            </select>
-            <ChevronDown size={13} />
-          </div>
-          <button
-            className="button subtle small"
-            onClick={() => {
-              setEdit(null);
-              setProjectModal(true);
+    <ReadOnlyDemoContext.Provider value={readOnly}>
+      <div className="app">
+        <aside className={"sidebar " + (mobile ? "mobile-open" : "")}>
+          <a
+            className="brand"
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("overview");
             }}
           >
-            <Plus size={15} />
-            新建项目
-          </button>
-          <div className="top-spacer" />
-          <span
-            className={
-              "connection " +
-              (settings?.ai_enabled && settings.chat_configured ? "online" : "")
-            }
-          >
-            <span className="status-dot" />
-            {settings?.ai_enabled && settings.chat_configured
-              ? "AI 已启用"
-              : "离线可用"}
-          </span>
-          <button
-            className="icon-button"
-            title="模型设置"
-            onClick={() => navigate("settings")}
-          >
-            <SettingsIcon size={18} />
-          </button>
-        </header>
-        <div className="content-layout">
-          <main className="main">
-            <div className="page-heading">
-              <div>
-                <div className="breadcrumb">
-                  工作空间 <span>/</span> {project?.name || "开始研究"}
-                </div>
-                <h1>
-                  {page === "overview"
-                    ? "研究，从这里继续"
-                    : nav.find((n) => n.id === page)?.name || "模型与设置"}
-                </h1>
-                <p>{subtitles[page]}</p>
-              </div>
-              {page === "overview" && project && (
-                <button
-                  className="button secondary"
-                  onClick={() => {
-                    setEdit(project);
-                    setProjectModal(true);
-                  }}
-                >
-                  <Pencil size={14} />
-                  编辑项目
-                </button>
-              )}
+            <div className="brand-mark">
+              <Layers size={24} />
             </div>
-            {loadError && (
-              <Alert tone="error">
-                {loadError}
-                <button className="text-button" onClick={() => refresh()}>
-                  重新连接
-                </button>
-              </Alert>
-            )}
-            {loading ? (
-              <Spinner />
-            ) : page === "settings" ? (
-              <SettingsView
-                settings={settings}
-                onChange={(s) => {
-                  setSettings(s);
-                  refresh();
-                }}
-                notify={notify}
-                pid={pid}
-              />
-            ) : !project ? (
-              <div className="welcome">
-                <div className="hero-icon">
-                  <Layers size={37} />
+            <div>
+              <strong>
+                研知<span>LAB</span>
+              </strong>
+              <small>RESEARCH WORKSPACE</small>
+            </div>
+          </a>
+          <div className="workspace-label">
+            {readOnly ? "公开科研演示" : "个人科研工作台"}{" "}
+            <Badge>{readOnly ? "DEMO" : "LOCAL"}</Badge>
+          </div>
+          <nav>
+            {nav.map((n) => (
+              <button
+                className={page === n.id ? "nav-item active" : "nav-item"}
+                key={n.id}
+                onClick={() => navigate(n.id)}
+              >
+                <n.icon size={18} />
+                {n.name}
+                {n.id === "papers" && papers.length > 0 && (
+                  <span className="nav-count">{papers.length}</span>
+                )}
+              </button>
+            ))}
+          </nav>
+          <div className="sidebar-bottom">
+            <div className="local-card">
+              <div className="row">
+                <span className="status-dot" />
+                <strong>{readOnly ? "公开只读演示" : "本地工作空间"}</strong>
+              </div>
+              <p>
+                {readOnly ? "仅展示合成测试资料。" : "原始资料保存在你的设备。"}
+                <br />
+                {readOnly
+                  ? "不接收上传，不调用外部 AI。"
+                  : "AI 外发由你明确开启。"}
+              </p>
+            </div>
+            <button
+              className={"nav-item " + (page === "settings" ? "active" : "")}
+              onClick={() => navigate("settings")}
+            >
+              <SettingsIcon size={18} />
+              模型与设置
+            </button>
+            <div className="user-row">
+              <div className="avatar">研</div>
+              <div>
+                <strong>{readOnly ? "示例研究" : "我的研究"}</strong>
+                <small>{readOnly ? "合成材料 · 只读" : "个人 · 单用户"}</small>
+              </div>
+              <span className="local-pill">{readOnly ? "演示" : "本地"}</span>
+            </div>
+          </div>
+        </aside>
+        {mobile && (
+          <div className="mobile-mask" onClick={() => setMobile(false)} />
+        )}
+        <div className="workspace">
+          <header className="topbar">
+            <button
+              className="icon-button mobile-menu"
+              aria-label="打开导航"
+              onClick={() => setMobile(!mobile)}
+            >
+              <Menu size={21} />
+            </button>
+            <div className="project-switch">
+              <FolderOpen size={17} />
+              <select
+                aria-label="当前科研项目"
+                value={pid}
+                onChange={(e) => setPid(e.target.value)}
+              >
+                <option value="">选择科研项目</option>
+                {projects.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                    {p.archived ? "（已归档）" : ""}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown size={13} />
+            </div>
+            <button
+              className="button subtle small"
+              disabled={loading || readOnly}
+              title={readOnly ? demoReadOnlyHint : undefined}
+              onClick={() => {
+                setEdit(null);
+                setProjectModal(true);
+              }}
+            >
+              <Plus size={15} />
+              新建项目
+            </button>
+            <div className="top-spacer" />
+            <span
+              className={
+                "connection " +
+                (settings?.ai_enabled && settings.chat_configured
+                  ? "online"
+                  : "")
+              }
+            >
+              <span className="status-dot" />
+              {settings?.ai_enabled && settings.chat_configured
+                ? "AI 已启用"
+                : "离线可用"}
+            </span>
+            <button
+              className="icon-button"
+              title="模型设置"
+              onClick={() => navigate("settings")}
+            >
+              <SettingsIcon size={18} />
+            </button>
+          </header>
+          {readOnly && (
+            <div
+              className="public-demo-banner"
+              role="note"
+              aria-label="公开演示说明"
+            >
+              <div>
+                <strong>公开只读演示</strong>
+                <span>
+                  仅含合成测试数据，不代表真实科研发现。不支持上传或保存修改；问答展示检索原文，不生成
+                  AI 总结。
+                </span>
+              </div>
+              <a
+                href="https://github.com/laoxuaner/Research-Assistant"
+                target="_blank"
+                rel="noreferrer"
+              >
+                下载源码，体验完整功能 <ArrowUpRight size={15} />
+              </a>
+            </div>
+          )}
+          <div className="content-layout">
+            <main className="main">
+              <div className="page-heading">
+                <div>
+                  <div className="breadcrumb">
+                    工作空间 <span>/</span> {project?.name || "开始研究"}
+                  </div>
+                  <h1>
+                    {page === "overview"
+                      ? "研究，从这里继续"
+                      : nav.find((n) => n.id === page)?.name || "模型与设置"}
+                  </h1>
+                  <p>{subtitles[page]}</p>
                 </div>
-                <p className="eyebrow">A CLEARER PATH TO DISCOVERY</p>
-                <h2>给你的研究，一个有条理的开始</h2>
-                <p>
-                  连接论文、研究问题与实验结果。
-                  <br />
-                  从创建第一个项目开始，逐步积累可以追溯的研究证据。
-                </p>
-                <div className="row center">
-                  <button
-                    className="button primary"
-                    onClick={() => setProjectModal(true)}
-                  >
-                    <Plus size={17} />
-                    创建科研项目
-                  </button>
+                {page === "overview" && project && (
                   <button
                     className="button secondary"
-                    disabled={demoBusy}
-                    onClick={importDemo}
+                    disabled={readOnly}
+                    title={readOnly ? demoReadOnlyHint : undefined}
+                    onClick={() => {
+                      setEdit(project);
+                      setProjectModal(true);
+                    }}
                   >
-                    {demoBusy ? (
-                      <LoaderCircle size={16} className="spin" />
-                    ) : (
-                      <Database size={16} />
-                    )}
-                    导入测试示例
+                    <Pencil size={14} />
+                    编辑项目
                   </button>
-                </div>
-                <div className="welcome-grid">
-                  {[
-                    [
-                      "01",
-                      "建立文献证据库",
-                      "上传 PDF，检索原文并回到引用页。",
-                    ],
-                    [
-                      "02",
-                      "检验你的研究假设",
-                      "导入数据，明确设计，运行可复现分析。",
-                    ],
-                    [
-                      "03",
-                      "保存完整研究轨迹",
-                      "将证据、图表和计算过程一起导出。",
-                    ],
-                  ].map(([n, t, d]) => (
-                    <div key={n}>
-                      <span>{n}</span>
-                      <h3>{t}</h3>
-                      <p>{d}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div key={pid}>
-                {project.archived && (
-                  <Alert>
-                    该项目已归档。可在“编辑项目”中恢复，历史资料仍可查看。
-                  </Alert>
-                )}
-                {page === "overview" && (
-                  <Overview
-                    project={project}
-                    revision={revision}
-                    onNavigate={navigate}
-                    onDemo={importDemo}
-                    demoBusy={demoBusy}
-                    notify={notify}
-                  />
-                )}{" "}
-                {page === "papers" && (
-                  <Library
-                    pid={pid}
-                    papers={papers}
-                    refresh={refresh}
-                    notify={notify}
-                    onRead={(id, p = 1) => setReader({ paperId: id, page: p })}
-                    onCite={openCitation}
-                  />
-                )}{" "}
-                {page === "chat" && (
-                  <Chat
-                    pid={pid}
-                    papers={papers}
-                    settings={settings}
-                    onCite={openCitation}
-                    notify={notify}
-                  />
-                )}{" "}
-                {page === "compare" && (
-                  <Compare
-                    pid={pid}
-                    papers={papers}
-                    onCite={openCitation}
-                    notify={notify}
-                  />
-                )}{" "}
-                {page === "experiments" && (
-                  <Experiments
-                    pid={pid}
-                    papers={papers}
-                    revision={revision}
-                    refresh={refresh}
-                    notify={notify}
-                    onReports={() => navigate("reports")}
-                  />
-                )}{" "}
-                {page === "reports" && (
-                  <Reports pid={pid} revision={revision} notify={notify} />
                 )}
               </div>
+              {loadError && (
+                <Alert tone="error">
+                  {loadError}
+                  <button className="text-button" onClick={() => refresh()}>
+                    重新连接
+                  </button>
+                </Alert>
+              )}
+              {loading ? (
+                <Spinner />
+              ) : page === "settings" ? (
+                <SettingsView
+                  settings={settings}
+                  onChange={(s) => {
+                    setSettings(s);
+                    refresh();
+                  }}
+                  notify={notify}
+                  pid={pid}
+                />
+              ) : !project ? (
+                <div className="welcome">
+                  <div className="hero-icon">
+                    <Layers size={37} />
+                  </div>
+                  <p className="eyebrow">A CLEARER PATH TO DISCOVERY</p>
+                  <h2>给你的研究，一个有条理的开始</h2>
+                  <p>
+                    连接论文、研究问题与实验结果。
+                    <br />
+                    从创建第一个项目开始，逐步积累可以追溯的研究证据。
+                  </p>
+                  <div className="row center">
+                    <button
+                      className="button primary"
+                      disabled={readOnly}
+                      onClick={() => setProjectModal(true)}
+                    >
+                      <Plus size={17} />
+                      创建科研项目
+                    </button>
+                    <button
+                      className="button secondary"
+                      disabled={demoBusy || readOnly}
+                      onClick={importDemo}
+                    >
+                      {demoBusy ? (
+                        <LoaderCircle size={16} className="spin" />
+                      ) : (
+                        <Database size={16} />
+                      )}
+                      导入测试示例
+                    </button>
+                  </div>
+                  <div className="welcome-grid">
+                    {[
+                      [
+                        "01",
+                        "建立文献证据库",
+                        "上传 PDF，检索原文并回到引用页。",
+                      ],
+                      [
+                        "02",
+                        "检验你的研究假设",
+                        "导入数据，明确设计，运行可复现分析。",
+                      ],
+                      [
+                        "03",
+                        "保存完整研究轨迹",
+                        "将证据、图表和计算过程一起导出。",
+                      ],
+                    ].map(([n, t, d]) => (
+                      <div key={n}>
+                        <span>{n}</span>
+                        <h3>{t}</h3>
+                        <p>{d}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div key={pid}>
+                  {project.archived && (
+                    <Alert>
+                      该项目已归档。可在“编辑项目”中恢复，历史资料仍可查看。
+                    </Alert>
+                  )}
+                  {page === "overview" && (
+                    <Overview
+                      project={project}
+                      revision={revision}
+                      onNavigate={navigate}
+                      onDemo={importDemo}
+                      demoBusy={demoBusy}
+                      notify={notify}
+                    />
+                  )}{" "}
+                  {page === "papers" && (
+                    <Library
+                      pid={pid}
+                      papers={papers}
+                      refresh={refresh}
+                      notify={notify}
+                      onRead={(id, p = 1) =>
+                        setReader({ paperId: id, page: p })
+                      }
+                      onCite={openCitation}
+                    />
+                  )}{" "}
+                  {page === "chat" && (
+                    <Chat
+                      pid={pid}
+                      papers={papers}
+                      settings={settings}
+                      onCite={openCitation}
+                      notify={notify}
+                    />
+                  )}{" "}
+                  {page === "compare" && (
+                    <Compare
+                      pid={pid}
+                      papers={papers}
+                      onCite={openCitation}
+                      notify={notify}
+                    />
+                  )}{" "}
+                  {page === "experiments" && (
+                    <Experiments
+                      pid={pid}
+                      papers={papers}
+                      revision={revision}
+                      refresh={refresh}
+                      notify={notify}
+                      onReports={() => navigate("reports")}
+                    />
+                  )}{" "}
+                  {page === "reports" && (
+                    <Reports pid={pid} revision={revision} notify={notify} />
+                  )}
+                </div>
+              )}
+              <footer className="page-footer">
+                <span>研知 · 让研究有据可循</span>
+                <span>
+                  {readOnly
+                    ? "公开只读演示 · 合成测试材料"
+                    : "本地个人工作空间 · v1.0"}
+                </span>
+              </footer>
+            </main>
+            {citation && (
+              <Evidence
+                citation={citation}
+                onClose={() => setCitation(null)}
+                onOpen={() =>
+                  setReader({
+                    paperId: citation.paper_id,
+                    page: citation.page_number,
+                  })
+                }
+              />
             )}
-            <footer className="page-footer">
-              <span>研知 · 让研究有据可循</span>
-              <span>本地个人工作空间 · v1.0</span>
-            </footer>
-          </main>
-          {citation && (
-            <Evidence
-              citation={citation}
-              onClose={() => setCitation(null)}
-              onOpen={() =>
-                setReader({
-                  paperId: citation.paper_id,
-                  page: citation.page_number,
-                })
-              }
-            />
-          )}
+          </div>
         </div>
-      </div>
-      {projectModal && (
-        <ProjectForm
-          value={edit}
-          onClose={() => {
-            setProjectModal(false);
-            setEdit(null);
-          }}
-          onSaved={onProjectSaved}
-          notify={notify}
-        />
-      )}{" "}
-      {reader && pid && (
-        <Reader
-          projectId={pid}
-          paperId={reader.paperId}
-          initialPage={reader.page}
-          onClose={() => setReader(null)}
-          onSave={refresh}
-          onCite={openCitation}
-          notify={notify}
-        />
-      )}{" "}
-      {toast && (
-        <div role="status" className={"toast " + (toast.error ? "error" : "")}>
-          <span>{toast.error ? "!" : <Check size={18} />}</span>
-          {toast.text}
-          <button
-            className="icon-button"
-            aria-label="关闭提示"
-            onClick={() => setToast(null)}
+        {projectModal && !readOnly && (
+          <ProjectForm
+            value={edit}
+            onClose={() => {
+              setProjectModal(false);
+              setEdit(null);
+            }}
+            onSaved={onProjectSaved}
+            notify={notify}
+          />
+        )}{" "}
+        {reader && pid && (
+          <Reader
+            projectId={pid}
+            paperId={reader.paperId}
+            initialPage={reader.page}
+            onClose={() => setReader(null)}
+            onSave={refresh}
+            onCite={openCitation}
+            notify={notify}
+          />
+        )}{" "}
+        {toast && (
+          <div
+            role="status"
+            className={"toast " + (toast.error ? "error" : "")}
           >
-            <X size={16} />
-          </button>
-        </div>
-      )}
-    </div>
+            <span>{toast.error ? "!" : <Check size={18} />}</span>
+            {toast.text}
+            <button
+              className="icon-button"
+              aria-label="关闭提示"
+              onClick={() => setToast(null)}
+            >
+              <X size={16} />
+            </button>
+          </div>
+        )}
+      </div>
+    </ReadOnlyDemoContext.Provider>
   );
 }
 function ProjectForm({
@@ -653,6 +701,7 @@ function Overview({
   demoBusy: boolean;
   notify: (s: string, e?: boolean) => void;
 }) {
+  const readOnly = useReadOnlyDemo();
   const [data, setData] = useState<{
       paper_count: number;
       pending_jobs: number;
@@ -878,9 +927,16 @@ function Overview({
       <div className="demo-note">
         <Database size={17} />
         <span>
-          想先了解完整流程？可显式导入标记为测试材料的中英文论文与实验数据。
+          {readOnly
+            ? "演示已预置中英文论文、实验统计与报告。可阅读原文、检索证据并下载复现包。"
+            : "想先了解完整流程？可显式导入标记为测试材料的中英文论文与实验数据。"}
         </span>
-        <button className="text-button" disabled={demoBusy} onClick={onDemo}>
+        <button
+          className="text-button"
+          disabled={demoBusy || readOnly}
+          title={readOnly ? "示例材料已预置" : undefined}
+          onClick={onDemo}
+        >
           导入测试示例
           <ArrowRight size={14} />
         </button>
@@ -903,6 +959,7 @@ function Library({
   onRead: (id: string, p?: number) => void;
   onCite: (c: Citation) => void;
 }) {
+  const readOnly = useReadOnlyDemo();
   const [query, setQuery] = useState(""),
     [year, setYear] = useState(""),
     [tags, setTags] = useState(""),
@@ -913,7 +970,7 @@ function Library({
     [warnings, setWarnings] = useState<string[]>([]),
     [remove, setRemove] = useState<Paper | null>(null);
   const upload = async (files: FileList | null) => {
-    if (!files?.length) return;
+    if (!files?.length || readOnly) return;
     const fd = new FormData();
     for (const f of Array.from(files)) fd.append("files", f);
     setBusy(true);
@@ -1000,7 +1057,10 @@ function Library({
           <Badge>{papers.length} 篇</Badge>
         </div>
         <label
-          className={"button primary file-button " + (busy ? "disabled" : "")}
+          className={
+            "button primary file-button " + (busy || readOnly ? "disabled" : "")
+          }
+          title={readOnly ? demoReadOnlyHint : undefined}
         >
           <Upload size={16} />
           {busy ? "正在处理…" : "上传 PDF"}
@@ -1008,7 +1068,7 @@ function Library({
             type="file"
             accept=".pdf,application/pdf"
             multiple
-            disabled={busy}
+            disabled={busy || readOnly}
             onChange={(e) => {
               upload(e.target.files);
               e.target.value = "";
@@ -1200,6 +1260,7 @@ function Library({
                           <button
                             className="icon-button"
                             title="重试解析"
+                            disabled={readOnly}
                             onClick={() => retry(p)}
                           >
                             <RefreshCw size={16} />
@@ -1216,6 +1277,7 @@ function Library({
                         <button
                           className="icon-button danger"
                           title="删除论文"
+                          disabled={readOnly}
                           aria-label={"删除 " + p.title}
                           onClick={() => setRemove(p)}
                         >
@@ -1353,7 +1415,7 @@ function Chat({
     try {
       const r = await api<{
         answer: string;
-        conversation_id: string;
+        conversation_id: string | null;
         citations: Citation[];
         mode: string;
         warnings: string[];
@@ -1365,7 +1427,7 @@ function Chat({
           conversation_id: cid || undefined,
         }),
       );
-      setCid(r.conversation_id);
+      setCid(r.conversation_id || "");
       setMessages((m) => [
         ...m,
         {
@@ -1395,9 +1457,11 @@ function Chat({
               : "AI 未配置或未启用"}
           </strong>
           <span>
-            {settings?.ai_enabled && settings.chat_configured
-              ? "回答基于当前项目检索片段，请结合原文审阅。"
-              : "当前可检索真实原文片段。设置模型并同意外发后，才能生成 AI 回答。"}
+            {settings?.read_only
+              ? "公开演示仅检索合成论文的原文片段，不调用外部模型，不保存会话。"
+              : settings?.ai_enabled && settings.chat_configured
+                ? "回答基于当前项目检索片段，请结合原文审阅。"
+                : "当前可检索真实原文片段。设置模型并同意外发后，才能生成 AI 回答。"}
           </span>
         </div>
         <Badge tone="teal">可追溯</Badge>
@@ -1824,6 +1888,7 @@ function SettingsView({
   notify: (s: string, e?: boolean) => void;
   pid: string;
 }) {
+  const readOnly = useReadOnlyDemo();
   const [busy, setBusy] = useState(false),
     [consent, setConsent] = useState(false),
     [indexStatus, setIndexStatus] = useState<Record<string, unknown> | null>(
@@ -1836,6 +1901,7 @@ function SettingsView({
         .catch(() => {});
   }, [pid]);
   const toggle = async () => {
+    if (readOnly) return;
     setBusy(true);
     try {
       const s = await api<Settings>("/settings", {
@@ -1851,6 +1917,7 @@ function SettingsView({
     }
   };
   const rebuild = async () => {
+    if (readOnly) return;
     setBusy(true);
     try {
       await api("/projects/" + pid + "/embeddings/rebuild", json({}));
@@ -1865,6 +1932,12 @@ function SettingsView({
     <Empty title="无法读取设置">请检查后端服务并刷新页面。</Empty>
   ) : (
     <div className="settings-layout">
+      {readOnly && (
+        <Alert>
+          {demoReadOnlyHint}。此环境不配置模型密钥、不调用外部
+          AI；以下设置仅供查看。
+        </Alert>
+      )}
       <section className="card">
         <div className="card-heading">
           <div>
@@ -1930,6 +2003,7 @@ function SettingsView({
             <label className="checkbox">
               <input
                 type="checkbox"
+                disabled={readOnly}
                 checked={consent}
                 onChange={(e) => setConsent(e.target.checked)}
               />
@@ -1941,6 +2015,7 @@ function SettingsView({
               "button " + (settings.ai_enabled ? "secondary" : "primary")
             }
             disabled={
+              readOnly ||
               busy ||
               (!settings.ai_enabled &&
                 (!consent ||
@@ -1969,6 +2044,7 @@ function SettingsView({
           <button
             className="button secondary"
             disabled={
+              readOnly ||
               busy ||
               !pid ||
               !settings.embedding_configured ||

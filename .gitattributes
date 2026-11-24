@@ -1,5 +1,5 @@
 # Preserve exact file bytes across platforms for source and data hash checks.
-* -text
+* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 
 # Treat research fixtures and screenshots as binary files.
 *.pdf binary

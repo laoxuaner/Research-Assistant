@@ -91,3 +91,26 @@ REPRODUCTION PASSED: input hash, analysis source, cleaning chain and saved resul
 - 该流程收集的网络请求没有外部 CDN/字体请求；未配置聊天/向量服务，没有真实外部模型调用。
 - 保存先提交数据库再返回成功；快速切换实验防止旧读取覆盖新记录；非零极小量用科学计数法；直方图不丢最大值。
 - 最终预览见 [workbench-preview.png](workbench-preview.png)。
+
+## 2026-11-24 在线演示补充验收
+
+公开演示使用独立数据目录和合成材料，不读取本机 `.env`，关闭聊天及向量服务。精确校验公开 HTTPS Host/Origin；后端拒绝上传、修改、删除和新建分析，离线问答仅返回检索证据，不保存访客会话。默认本机工作台仍支持完整写入流程。
+
+- 后端：原 API 17 项、新增公开演示 31 项、统计/模型适配/导出 44 项，共 **92 项通过**。覆盖独立目录保护、只读 API、精确域名、离线证据、重启幂等和报告导出。
+- 前端：`npm.cmd run build` 通过。数值与原有工作流 **10 项通过**；只读演示 **1 项通过**，包含停滞 PDF 下载时关闭并确认 AbortSignal、重新打开及完整渲染第 2 页。
+- 真实公网：通过实际 Cloudflare Quick Tunnel 地址执行 `playwright.public.config.ts`，**1 项通过**；未拦截或伪造 API。核对 HTTPS 页面、只读设置、拒绝写入、PDF 实际完成渲染、离线引用、保存统计、三张报告图与 ZIP 下载，浏览器 `pageerror` 为空。
+- 修复首次公网检查暴露的 PDF Worker 提前终止错误；复测通过。PDF 下载有 45 秒超时并可取消，初始化/渲染收尾后统一销毁资源；测试等待真实渲染完成标记，不以 Canvas 默认尺寸判断成功。
+- Windows 临时演示脚本：语法解析、实际启动、状态查询、重复启动、停止及重启均通过。以进程 ID、启动时间、可执行路径和参数核验身份后，仅停止演示进程；保留本机资料和演示目录。
+- `cloudflared` 使用官方 2026.10.7 Windows amd64 便携版，SHA-256 与该版本官方发布页面一致。程序与会话记录位于忽略的 `tmp/`，未提交到 Git。
+- Docker/Render 配置已做 YAML 和启动参数检查，**本机没有 Docker，未运行镜像构建或 Render 发布**。本次按用户选择使用临时链接；电脑关机、休眠、断网或停止隧道后不可访问，重建时地址改变。
+
+公网测试命令（替换为启动脚本实际输出的 URL）：
+
+```powershell
+$env:PUBLIC_DEMO_URL = 'https://your-current-url.trycloudflare.com'
+Push-Location frontend
+npx.cmd playwright test --config=playwright.public.config.ts
+Pop-Location
+```
+
+真实模型服务仍未配置，本次公网演示不包含外部模型调用验收。

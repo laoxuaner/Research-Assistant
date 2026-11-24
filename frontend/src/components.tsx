@@ -7,6 +7,8 @@ import {
   useEffect,
   useRef,
   useState,
+  createContext,
+  useContext,
   type ReactNode,
   type ReactElement,
 } from "react";
@@ -32,6 +34,9 @@ import {
   fmt,
 } from "./api";
 pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
+export const ReadOnlyDemoContext = createContext(false);
+export const demoReadOnlyHint = "公开演示只读，完整功能请下载本地运行";
+export const useReadOnlyDemo = () => useContext(ReadOnlyDemoContext);
 export const statusLabel: Record<string, string> = {
   queued: "排队中",
   running: "处理中",
@@ -267,6 +272,7 @@ export function Reader({
   onCite: (c: Citation) => void;
   notify: (s: string, error?: boolean) => void;
 }) {
+  const readOnly = useReadOnlyDemo();
   const [paper, setPaper] = useState<Paper | null>(null),
     [page, setPage] = useState(initialPage),
     [loading, setLoading] = useState(true),
@@ -276,64 +282,115 @@ export function Reader({
     [busy, setBusy] = useState(false),
     [pdfError, setPdfError] = useState("");
   const canvas = useRef<HTMLCanvasElement>(null);
-  const doc = useRef<pdfjs.PDFDocumentProxy | null>(null);
+  const [pdfDocument, setPdfDocument] = useState<pdfjs.PDFDocumentProxy | null>(
+    null,
+  );
+  const renderJob = useRef<{
+    cancel: () => void;
+    settled: Promise<void>;
+  } | null>(null);
   const url = "/api/projects/" + projectId + "/papers/" + paperId + "/file";
   useEffect(() => {
     let cancelled = false;
+    let timedOut = false;
+    let task: pdfjs.PDFDocumentLoadingTask | undefined;
+    const controller = new AbortController();
+    setPdfDocument(null);
+    setPaper(null);
+    setLoading(true);
+    setError("");
+    setPdfError("");
     api<Paper>(`/projects/${projectId}/papers/${paperId}`)
       .then((p) => {
         if (!cancelled) setPaper(p);
       })
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
-    const task = pdfjs.getDocument({
-      url,
-      cMapUrl: "/pdfjs/cmaps/",
-      cMapPacked: true,
-      standardFontDataUrl: "/pdfjs/standard_fonts/",
-      isEvalSupported: false,
-    });
-    task.promise
-      .then((d) => {
-        if (cancelled) {
-          d.destroy();
-          return;
-        }
-        doc.current = d;
-        setPage((p) => Math.min(p, d.numPages));
-      })
       .catch((e) => {
-        if (!cancelled) setPdfError(String(e.message));
+        if (!cancelled) setError(e.message);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
       });
+    // Fetch first so closing a slow download aborts it without creating a
+    // half-initialized PDF.js worker. Supported uploads are capped at 30 MB.
+    const timeout = window.setTimeout(() => {
+      timedOut = true;
+      controller.abort();
+    }, 45000);
+    const loading = (async () => {
+      const response = await fetch(url, { signal: controller.signal });
+      if (!response.ok)
+        throw new Error(`PDF 读取失败（HTTP ${response.status}）`);
+      const data = new Uint8Array(await response.arrayBuffer());
+      if (cancelled) return;
+      task = pdfjs.getDocument({
+        data,
+        cMapUrl: "/pdfjs/cmaps/",
+        cMapPacked: true,
+        standardFontDataUrl: "/pdfjs/standard_fonts/",
+        isEvalSupported: false,
+      });
+      const d = await task.promise;
+      if (!cancelled) {
+        setPdfDocument(d);
+        setPage((p) => Math.min(p, d.numPages));
+      }
+    })()
+      .catch((e) => {
+        if (!cancelled)
+          setPdfError(
+            timedOut ? "PDF 读取超时，请重新打开论文" : String(e.message),
+          );
+      })
+      .finally(() => window.clearTimeout(timeout));
     return () => {
       cancelled = true;
-      task.destroy();
-      doc.current = null;
+      controller.abort();
+      window.clearTimeout(timeout);
+      const rendering = renderJob.current;
+      rendering?.cancel();
+      // One owner destroys this loading task, after any worker initialization
+      // and cancelled render have settled. Destroying the worker before its
+      // initial handshake races PDF.js 4's ensureNotTerminated/onFailure path.
+      void Promise.allSettled([
+        loading,
+        rendering?.settled || Promise.resolve(),
+      ])
+        .then(() => task?.destroy())
+        .catch((e) =>
+          console.warn(
+            "PDF 资源清理失败",
+            e instanceof Error ? e.name : "UnknownError",
+          ),
+        );
     };
   }, [projectId, paperId, url]);
   useEffect(() => {
-    if (!paper || !canvas.current) return;
+    if (!paper || !pdfDocument || !canvas.current) return;
     let task: pdfjs.RenderTask | undefined;
     let stopped = false;
-    async function render() {
+    const c = canvas.current;
+    delete c.dataset.renderedPage;
+    const job = {
+      cancel: () => {
+        stopped = true;
+        delete c.dataset.renderedPage;
+        task?.cancel();
+      },
+      settled: Promise.resolve(),
+    };
+    renderJob.current = job;
+    job.settled = (async () => {
       try {
-        const d = doc.current;
-        if (!d) {
-          window.setTimeout(() => {
-            if (!stopped) render();
-          }, 150);
-          return;
-        }
-        const p = await d.getPage(page);
+        const p = await pdfDocument.getPage(page);
         if (stopped || !canvas.current) return;
         const viewport = p.getViewport({ scale: 1.35 });
-        const c = canvas.current;
         c.height = viewport.height;
         c.width = viewport.width;
         const context = c.getContext("2d");
         if (context) {
           task = p.render({ canvasContext: context, viewport });
           await task.promise;
+          if (!stopped) c.dataset.renderedPage = String(page);
         }
       } catch (e) {
         if (
@@ -343,15 +400,14 @@ export function Reader({
         )
           setPdfError(e.message);
       }
-    }
-    render();
+    })();
     return () => {
-      stopped = true;
-      task?.cancel();
+      job.cancel();
+      if (renderJob.current === job) renderJob.current = null;
     };
-  }, [paper, page]);
+  }, [paper, page, pdfDocument]);
   const save = async () => {
-    if (!paper) return;
+    if (!paper || readOnly) return;
     setBusy(true);
     try {
       await api(`/projects/${projectId}/papers/${paperId}`, {
@@ -458,7 +514,12 @@ export function Reader({
                     PDF 预览失败：{pdfError}。可下载原始文件继续阅读。
                   </Alert>
                 ) : (
-                  <canvas ref={canvas} aria-label={"PDF 第 " + page + " 页"} />
+                  <canvas
+                    ref={canvas}
+                    width={0}
+                    height={0}
+                    aria-label={"PDF 第 " + page + " 页"}
+                  />
                 )}
               </div>
             </div>
@@ -487,7 +548,15 @@ export function Reader({
                   </p>
                 </>
               ) : tab === "metadata" ? (
-                <div className="form-grid single">
+                <fieldset
+                  className="form-grid single read-only-fields"
+                  disabled={readOnly}
+                >
+                  {readOnly && (
+                    <p className="tiny muted">
+                      {demoReadOnlyHint}；可查看示例元数据与笔记。
+                    </p>
+                  )}
                   <Field label="标题">
                     <input
                       value={paper.title}
@@ -564,13 +633,14 @@ export function Reader({
                   </Field>
                   <button
                     className="button primary"
-                    disabled={busy}
+                    disabled={busy || readOnly}
+                    title={readOnly ? demoReadOnlyHint : undefined}
                     onClick={save}
                   >
                     <Save size={15} />
                     保存信息
                   </button>
-                </div>
+                </fieldset>
               ) : (
                 <>
                   <button

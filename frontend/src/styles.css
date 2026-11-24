@@ -2663,3 +2663,59 @@ tr:last-child td {
   display: block;
   margin-top: 5px;
 }
+
+.public-demo-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 15px 30px;
+  border-bottom: 1px solid #c9e2da;
+  background: #eaf6f0;
+  color: #205e52;
+}
+.public-demo-banner strong {
+  display: block;
+  margin-bottom: 3px;
+}
+.public-demo-banner span {
+  font-size: 12px;
+}
+.public-demo-banner a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.read-only-fields {
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.form-stack {
+  display: grid;
+  gap: 18px;
+}
+.read-only-fields:disabled input,
+.read-only-fields:disabled textarea,
+.read-only-fields:disabled select {
+  color: #50676c;
+  -webkit-text-fill-color: #50676c;
+  opacity: 1;
+  background: #f4f7f8;
+  cursor: default;
+}
+@media (max-width: 700px) {
+  .public-demo-banner {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 13px 18px;
+    gap: 8px;
+  }
+}

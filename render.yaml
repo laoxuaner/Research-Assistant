@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: research-assistant-demo
+    runtime: docker
+    repo: https://github.com/laoxuaner/Research-Assistant
+    branch: main
+    plan: free
+    region: singapore
+    numInstances: 1
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: DEPLOYMENT_MODE
+        value: demo
+      - key: DEMO_DATA_DIR
+        value: /tmp/research-assistant-demo
+      - key: PORT
+        value: "10000"
+      - key: OPENBLAS_NUM_THREADS
+        value: "1"
+      - key: OMP_NUM_THREADS
+        value: "1"
+      - key: MKL_NUM_THREADS
+        value: "1"

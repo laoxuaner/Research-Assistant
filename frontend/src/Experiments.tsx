@@ -56,6 +56,8 @@ import {
   Field,
   Modal,
   Spinner,
+  useReadOnlyDemo,
+  demoReadOnlyHint,
 } from "./components";
 type Props = {
   pid: string;
@@ -88,6 +90,7 @@ export default function Experiments({
   notify,
   onReports,
 }: Props) {
+  const readOnly = useReadOnlyDemo();
   const [experiments, setExperiments] = useState<Experiment[]>([]),
     [eid, setEid] = useState(""),
     [detail, setDetail] = useState<Experiment | null>(null),
@@ -108,7 +111,7 @@ export default function Experiments({
       explanation: string;
       configured: boolean;
     } | null>(null),
-    [panel, setPanel] = useState("data");
+    [panel, setPanel] = useState(readOnly ? "result" : "data");
   const selectedExperiment = useRef("");
   selectedExperiment.current = eid;
   const detailRequest = useRef(0);
@@ -125,6 +128,7 @@ export default function Experiments({
       )
         return;
       setDetail(d);
+      if (readOnly) setConfig(d.analyses?.[0]?.config || initialConfig);
       setDatasetId((old) =>
         d.datasets?.some((x) => x.id === old) ? old : d.datasets?.[0]?.id || "",
       );
@@ -134,7 +138,7 @@ export default function Experiments({
       );
       return d;
     },
-    [pid],
+    [pid, readOnly],
   );
   useEffect(() => {
     setLoading(true);
@@ -172,7 +176,7 @@ export default function Experiments({
         ]
       : [];
   const upload = async () => {
-    if (!file || !eid) return;
+    if (!file || !eid || readOnly) return;
     const fd = new FormData();
     fd.append("file", file);
     if (sheet) fd.append("sheet", sheet);
@@ -196,7 +200,7 @@ export default function Experiments({
     }
   };
   const cleanData = async () => {
-    if (!dataset) return;
+    if (!dataset || readOnly) return;
     setBusy(true);
     try {
       const d = await api<Dataset>(
@@ -225,6 +229,7 @@ export default function Experiments({
   };
   const run = async (e: FormEvent) => {
     e.preventDefault();
+    if (readOnly) return;
     setBusy(true);
     setError("");
     try {
@@ -243,6 +248,7 @@ export default function Experiments({
     }
   };
   const suggest = async () => {
+    if (readOnly) return;
     setBusy(true);
     try {
       const r = await api<{
@@ -266,6 +272,7 @@ export default function Experiments({
     }
   };
   const createReport = async () => {
+    if (readOnly) return;
     if (!analysis) return;
     setBusy(true);
     try {
@@ -312,11 +319,21 @@ export default function Experiments({
           <h2>实验记录</h2>
           <Badge>{experiments.length} 个</Badge>
         </div>
-        <button className="button primary" onClick={() => setModal(true)}>
+        <button
+          className="button primary"
+          disabled={readOnly}
+          title={readOnly ? demoReadOnlyHint : undefined}
+          onClick={() => setModal(true)}
+        >
           <Plus size={16} />
           新建实验
         </button>
       </div>
+      {readOnly && (
+        <Alert>
+          以下为合成数据的已保存分析。可查看数据版本、配置、统计图表并下载复现包；运行新分析与生成报告请使用本地版。
+        </Alert>
+      )}
       {loading ? (
         <Spinner />
       ) : !experiments.length ? (
@@ -324,7 +341,11 @@ export default function Experiments({
           <Empty
             title="把研究假设变成一次实验"
             action={
-              <button className="button primary" onClick={() => setModal(true)}>
+              <button
+                className="button primary"
+                disabled={readOnly}
+                onClick={() => setModal(true)}
+              >
                 <Plus size={16} />
                 创建实验记录
               </button>
@@ -423,6 +444,7 @@ export default function Experiments({
                         <span>点击选择文件，不会自动覆盖已有版本</span>
                         <input
                           type="file"
+                          disabled={readOnly}
                           accept=".csv,.xlsx"
                           aria-label="实验数据文件"
                           onChange={(e) => {
@@ -456,7 +478,8 @@ export default function Experiments({
                         </Field>
                         <button
                           className="button primary"
-                          disabled={!file || busy}
+                          disabled={readOnly || !file || busy}
+                          title={readOnly ? demoReadOnlyHint : undefined}
                           onClick={upload}
                         >
                           {busy ? (
@@ -480,6 +503,8 @@ export default function Experiments({
                           </div>
                           <button
                             className="button secondary small"
+                            disabled={readOnly}
+                            title={readOnly ? demoReadOnlyHint : undefined}
                             onClick={() => {
                               setCleanColumns([]);
                               setDropDuplicates(false);
@@ -546,7 +571,7 @@ export default function Experiments({
                           </div>
                           <button
                             className="button secondary small"
-                            disabled={busy}
+                            disabled={readOnly || busy}
                             onClick={suggest}
                           >
                             <Sparkles size={14} />
@@ -554,168 +579,179 @@ export default function Experiments({
                           </button>
                         </div>
                         <form className="form-body" onSubmit={run}>
-                          <div className="form-grid three">
-                            {selector("分组列", "group_column", true)}
-                            {selector("主要指标列", "metric_column", true)}
-                            <Field label="指标单位">
-                              <input
-                                value={config.unit}
-                                onChange={(e) =>
-                                  update({ unit: e.target.value })
-                                }
-                                placeholder="例如 ms / % / mg"
-                              />
-                            </Field>
-                            <Field label="基准组 A">
-                              <input
-                                list="analysis-groups"
-                                required
-                                value={config.group_a}
-                                onChange={(e) =>
-                                  update({ group_a: e.target.value })
-                                }
-                                placeholder="与数据中的组名完全一致"
-                              />
-                            </Field>
-                            <Field label="比较组 B">
-                              <input
-                                list="analysis-groups"
-                                required
-                                value={config.group_b}
-                                onChange={(e) =>
-                                  update({ group_b: e.target.value })
-                                }
-                              />
-                            </Field>
-                            <Field label="指标方向">
-                              <select
-                                value={config.direction}
-                                onChange={(e) =>
-                                  update({
-                                    direction: e.target
-                                      .value as AnalysisConfig["direction"],
-                                  })
-                                }
+                          <fieldset
+                            className="read-only-fields form-stack"
+                            disabled={readOnly}
+                          >
+                            <div className="form-grid three">
+                              {selector("分组列", "group_column", true)}
+                              {selector("主要指标列", "metric_column", true)}
+                              <Field label="指标单位">
+                                <input
+                                  value={config.unit}
+                                  onChange={(e) =>
+                                    update({ unit: e.target.value })
+                                  }
+                                  placeholder="例如 ms / % / mg"
+                                />
+                              </Field>
+                              <Field label="基准组 A">
+                                <input
+                                  list="analysis-groups"
+                                  required
+                                  value={config.group_a}
+                                  onChange={(e) =>
+                                    update({ group_a: e.target.value })
+                                  }
+                                  placeholder="与数据中的组名完全一致"
+                                />
+                              </Field>
+                              <Field label="比较组 B">
+                                <input
+                                  list="analysis-groups"
+                                  required
+                                  value={config.group_b}
+                                  onChange={(e) =>
+                                    update({ group_b: e.target.value })
+                                  }
+                                />
+                              </Field>
+                              <Field label="指标方向">
+                                <select
+                                  value={config.direction}
+                                  onChange={(e) =>
+                                    update({
+                                      direction: e.target
+                                        .value as AnalysisConfig["direction"],
+                                    })
+                                  }
+                                >
+                                  <option value="higher">越大越好</option>
+                                  <option value="lower">越小越好</option>
+                                </select>
+                              </Field>
+                              <Field label="分析设计">
+                                <select
+                                  value={config.design}
+                                  onChange={(e) =>
+                                    update({
+                                      design: e.target
+                                        .value as AnalysisConfig["design"],
+                                    })
+                                  }
+                                >
+                                  <option value="descriptive">
+                                    仅描述统计
+                                  </option>
+                                  <option value="independent">
+                                    独立样本 · Welch t 检验
+                                  </option>
+                                  <option value="paired">
+                                    配对样本 · 配对 t 检验
+                                  </option>
+                                </select>
+                              </Field>
+                              <Field
+                                label="实验单位"
+                                hint="例如：独立受试者、独立培养皿。重复测量不能视为独立样本。"
                               >
-                                <option value="higher">越大越好</option>
-                                <option value="lower">越小越好</option>
-                              </select>
-                            </Field>
-                            <Field label="分析设计">
-                              <select
-                                value={config.design}
-                                onChange={(e) =>
-                                  update({
-                                    design: e.target
-                                      .value as AnalysisConfig["design"],
-                                  })
-                                }
-                              >
-                                <option value="descriptive">仅描述统计</option>
-                                <option value="independent">
-                                  独立样本 · Welch t 检验
-                                </option>
-                                <option value="paired">
-                                  配对样本 · 配对 t 检验
-                                </option>
-                              </select>
-                            </Field>
-                            <Field
-                              label="实验单位"
-                              hint="例如：独立受试者、独立培养皿。重复测量不能视为独立样本。"
-                            >
-                              <input
-                                required={config.design !== "descriptive"}
-                                value={config.experimental_unit}
-                                onChange={(e) =>
-                                  update({ experimental_unit: e.target.value })
-                                }
-                                placeholder="请明确实际实验单位"
-                              />
-                            </Field>
-                            {selector(
-                              "实验单位 / 样本 ID 列",
-                              "sample_id_column",
-                              config.design !== "descriptive",
-                            )}
-                            {config.design === "paired" &&
-                              selector("严格配对 ID 列", "pair_column", true)}
-                            <Field label="缺失与无效值处理">
-                              <select
-                                value={config.missing_policy}
-                                onChange={(e) =>
-                                  update({
-                                    missing_policy: e.target
-                                      .value as AnalysisConfig["missing_policy"],
-                                  })
-                                }
-                              >
-                                <option value="error">
-                                  发现后停止，交由我处理
-                                </option>
-                                <option value="drop">
-                                  排除并记录受影响的行
-                                </option>
-                              </select>
-                            </Field>
-                            <Field label="检验方向">
-                              <select
-                                value={config.alternative}
-                                onChange={(e) =>
-                                  update({
-                                    alternative: e.target
-                                      .value as AnalysisConfig["alternative"],
-                                  })
-                                }
-                              >
-                                <option value="two-sided">
-                                  双侧 · B 与 A 不同
-                                </option>
-                                <option value="greater">单侧 · B &gt; A</option>
-                                <option value="less">单侧 · B &lt; A</option>
-                              </select>
-                            </Field>
-                          </div>
-                          <datalist id="analysis-groups">
-                            {groups.map((g) => (
-                              <option key={g} value={g} />
-                            ))}
-                          </datalist>
-                          <Alert>
-                            所有差值统一为 B − A；相对变化以 |A|
-                            为分母。每次只检验一个主要指标。均值差的 95%
-                            区间、统计显著性与实际价值需要分别解释。
-                          </Alert>
-                          <label className="checkbox confirmation">
-                            <input
-                              type="checkbox"
-                              required
-                              checked={config.confirmed}
-                              onChange={(e) =>
-                                setConfig({
-                                  ...config,
-                                  confirmed: e.target.checked,
-                                })
-                              }
-                            />
-                            我已核对数据版本、实验单位、独立/配对设计、两组对象与缺失值处理，同意执行以上配置。
-                          </label>
-                          <div className="form-actions">
-                            <span className="tiny muted">
-                              统计计算由后端确定性函数执行
-                            </span>
-                            <button
-                              className="button primary"
-                              disabled={busy || !config.confirmed}
-                            >
-                              {busy ? (
-                                <LoaderCircle size={16} className="spin" />
-                              ) : (
-                                <BarChart3 size={16} />
+                                <input
+                                  required={config.design !== "descriptive"}
+                                  value={config.experimental_unit}
+                                  onChange={(e) =>
+                                    update({
+                                      experimental_unit: e.target.value,
+                                    })
+                                  }
+                                  placeholder="请明确实际实验单位"
+                                />
+                              </Field>
+                              {selector(
+                                "实验单位 / 样本 ID 列",
+                                "sample_id_column",
+                                config.design !== "descriptive",
                               )}
-                              运行并保存分析
-                            </button>
-                          </div>
+                              {config.design === "paired" &&
+                                selector("严格配对 ID 列", "pair_column", true)}
+                              <Field label="缺失与无效值处理">
+                                <select
+                                  value={config.missing_policy}
+                                  onChange={(e) =>
+                                    update({
+                                      missing_policy: e.target
+                                        .value as AnalysisConfig["missing_policy"],
+                                    })
+                                  }
+                                >
+                                  <option value="error">
+                                    发现后停止，交由我处理
+                                  </option>
+                                  <option value="drop">
+                                    排除并记录受影响的行
+                                  </option>
+                                </select>
+                              </Field>
+                              <Field label="检验方向">
+                                <select
+                                  value={config.alternative}
+                                  onChange={(e) =>
+                                    update({
+                                      alternative: e.target
+                                        .value as AnalysisConfig["alternative"],
+                                    })
+                                  }
+                                >
+                                  <option value="two-sided">
+                                    双侧 · B 与 A 不同
+                                  </option>
+                                  <option value="greater">
+                                    单侧 · B &gt; A
+                                  </option>
+                                  <option value="less">单侧 · B &lt; A</option>
+                                </select>
+                              </Field>
+                            </div>
+                            <datalist id="analysis-groups">
+                              {groups.map((g) => (
+                                <option key={g} value={g} />
+                              ))}
+                            </datalist>
+                            <Alert>
+                              所有差值统一为 B − A；相对变化以 |A|
+                              为分母。每次只检验一个主要指标。均值差的 95%
+                              区间、统计显著性与实际价值需要分别解释。
+                            </Alert>
+                            <label className="checkbox confirmation">
+                              <input
+                                type="checkbox"
+                                required
+                                checked={config.confirmed}
+                                onChange={(e) =>
+                                  setConfig({
+                                    ...config,
+                                    confirmed: e.target.checked,
+                                  })
+                                }
+                              />
+                              我已核对数据版本、实验单位、独立/配对设计、两组对象与缺失值处理，同意执行以上配置。
+                            </label>
+                            <div className="form-actions">
+                              <span className="tiny muted">
+                                统计计算由后端确定性函数执行
+                              </span>
+                              <button
+                                className="button primary"
+                                disabled={readOnly || busy || !config.confirmed}
+                              >
+                                {busy ? (
+                                  <LoaderCircle size={16} className="spin" />
+                                ) : (
+                                  <BarChart3 size={16} />
+                                )}
+                                运行并保存分析
+                              </button>
+                            </div>
+                          </fieldset>
                         </form>
                       </section>
                     </>
@@ -748,7 +784,12 @@ export default function Experiments({
                       </Field>
                       <button
                         className="button primary"
-                        disabled={busy || !analysis}
+                        disabled={readOnly || busy || !analysis}
+                        title={
+                          readOnly
+                            ? "报告已预置，请前往研究报告页面查看和下载"
+                            : undefined
+                        }
                         onClick={createReport}
                       >
                         <FileSpreadsheet size={16} />
@@ -784,7 +825,7 @@ export default function Experiments({
           )}
         </>
       )}
-      {modal && (
+      {modal && !readOnly && (
         <ExperimentForm
           pid={pid}
           papers={papers}
@@ -798,7 +839,7 @@ export default function Experiments({
           }}
         />
       )}
-      {clean && dataset && (
+      {clean && dataset && !readOnly && (
         <Modal title="清洗并保存为新版本" onClose={() => setClean(false)}>
           <div className="form-body">
             <Alert>

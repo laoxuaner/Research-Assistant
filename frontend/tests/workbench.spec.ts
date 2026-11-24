@@ -52,13 +52,7 @@ test("complete offline research workflow with original PDF and reproducible expo
     .click();
   const reader = page.getByRole("dialog");
   await expect(reader.getByLabel("PDF 页码")).toHaveValue("2");
-  await expect
-    .poll(() =>
-      reader
-        .locator("canvas")
-        .evaluate((el) => (el as HTMLCanvasElement).width),
-    )
-    .toBeGreaterThan(100);
+  await expect(reader.locator("canvas")).toHaveAttribute("data-rendered-page", "2");
   await expect(reader.getByText(/PDF 预览失败/)).toHaveCount(0);
   await reader.getByRole("button", { name: "关闭", exact: true }).click();
 

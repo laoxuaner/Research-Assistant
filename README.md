@@ -6,6 +6,12 @@
 
 代码学习：[逐文件源码解读](docs/code-guide/README.md) · [离线完整源码阅读器](docs/code-guide/code-reader.html)。
 
+## 在线演示
+
+支持通过 Cloudflare Quick Tunnel 创建临时 HTTPS 演示链接，需要电脑保持开机；也提供可选的 Render 免费 Docker 部署配置。操作步骤见 [在线演示与部署说明](docs/DEPLOYMENT.md)。
+
+公开演示使用独立的合成测试数据，默认只读并关闭模型调用。本机论文、数据库和密钥不会交给演示服务；完整功能继续通过下方本地启动方式使用。实际演示地址以启动脚本或部署平台返回的地址为准。
+
 ## 快速启动（Windows PowerShell）
 
 需要 Python 3.12+、Node.js 20+（附带 npm）、可用的网络以首次安装依赖。当前验收环境为 Python 3.12.14、Node.js 24.14.1、npm 11.11.0。日常离线使用不需要模型密钥。
@@ -217,6 +223,6 @@ frontend/package-lock.json  npm 锁文件
 
 ## 本次交付验证
 
-已通过 61 项后端测试、10 项前端测试（含 3 项真实浏览器工作流）、TypeScript/Vite 构建，以及导出包在全新虚拟环境中的独立复现。真实外部模型调用尚需配置密钥后验证。完整证据与限制见 [验收记录](docs/ACCEPTANCE.md)。
+当前已通过 92 项后端测试、12 项前端测试（7 项数值测试、3 项原有浏览器流程、1 项只读演示流程、1 项真实公网流程）和 TypeScript/Vite 生产构建。原有导出包的全新虚拟环境复现记录保留。真实外部模型调用尚需配置密钥后验证；Docker 镜像尚未构建验收。完整证据与限制见 [验收记录](docs/ACCEPTANCE.md)。
 
 ![实验分析界面（合成测试数据）](docs/workbench-preview.png)

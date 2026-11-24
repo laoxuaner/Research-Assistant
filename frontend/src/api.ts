@@ -42,6 +42,8 @@ export type Job = {
   created_at: string;
 };
 export type Settings = {
+  deployment_mode: "local" | "demo";
+  read_only: boolean;
   chat_configured: boolean;
   embedding_configured: boolean;
   ai_enabled: boolean;
