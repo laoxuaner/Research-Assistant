@@ -1,0 +1,69 @@
+"""Export an isolated synthetic API fixture for clean-environment reproduction.
+
+Does not install dependencies or run an external model.
+Usage: .venv/Scripts/python.exe scripts/verify_reproduction.py
+Then create a clean venv, install the EXPORTED requirements.txt and run reproduce.py.
+"""
+from __future__ import annotations
+import argparse
+import hashlib
+import io
+import json
+from pathlib import Path
+import sys
+import zipfile
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "backend"))
+from fastapi.testclient import TestClient
+from app.main import create_app
+from app.config import Settings
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--app-data", default="tmp/repro-app")
+    parser.add_argument("--output", default="tmp/repro-clean")
+    args = parser.parse_args()
+    app_data, output = (ROOT / args.app_data).resolve(), (ROOT / args.output).resolve()
+    for folder in [app_data, output]:
+        if not folder.is_relative_to((ROOT / "tmp").resolve()):
+            raise ValueError("Verification directories must be inside this project's tmp directory")
+        if folder.exists() and any(folder.iterdir()):
+            raise ValueError(f"Use a fresh empty verification directory: {folder}")
+    output.mkdir(parents=True, exist_ok=True)
+    settings = Settings(ai_chat_model="", ai_api_key="", embedding_model="", embedding_api_key="")
+    with TestClient(create_app(data_dir=app_data, settings=settings)) as client:
+        demo = client.post("/api/demo")
+        demo.raise_for_status()
+        project_id = demo.json()["project_id"]
+        experiments = client.get(f"/api/projects/{project_id}/experiments")
+        experiments.raise_for_status()
+        experiment_id = experiments.json()[0]["id"]
+        detail = client.get(f"/api/projects/{project_id}/experiments/{experiment_id}")
+        detail.raise_for_status()
+        analysis = detail.json()["analyses"][0]
+        assert analysis["result"]["comparison"]["difference"] == 2
+        report = client.post(f"/api/projects/{project_id}/reports",
+                             json={"analysis_id": analysis["id"], "title": "DEMO clean reproduction acceptance"})
+        report.raise_for_status()
+        download = client.get(f"/api/projects/{project_id}/reports/{report.json()['id']}/download?format=zip")
+        download.raise_for_status()
+        blob = download.content
+    archive_path = output.parent / (output.name + ".zip")
+    archive_path.write_bytes(blob)
+    with zipfile.ZipFile(io.BytesIO(blob)) as archive:
+        names = archive.namelist()
+        for name in names:
+            if not (output / name).resolve().is_relative_to(output):
+                raise ValueError("Unexpected unsafe archive entry")
+        archive.extractall(output)
+    result = {
+        "archive": str(archive_path), "archive_sha256": hashlib.sha256(blob).hexdigest(),
+        "output": str(output), "app_data": str(app_data), "files": names,
+        "analysis_id": analysis["id"], "mean_difference": analysis["result"]["comparison"]["difference"],
+        "note": "Export succeeded; dependency installation and reproduce.py execution are separate checks.",
+    }
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+
+if __name__ == "__main__":
+    main()

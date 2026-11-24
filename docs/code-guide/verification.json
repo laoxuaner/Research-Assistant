@@ -1,0 +1,55 @@
+{
+  "scope": "Documentation checks only; application tests were not rerun in this explanation task.",
+  "sourceFiles": 60,
+  "sourceLines": 16737,
+  "ownCodeConfigFiles": 52,
+  "ownCodeConfigLines": 11498,
+  "verifiedSourceExcerpts": 280,
+  "explicitSyntaxIllustrations": 1,
+  "missingLocalLinks": [],
+  "chapterChecks": [
+    {
+      "chapter": "00-start-here.md",
+      "verifiedCodeBlocks": 1,
+      "unmatched": []
+    },
+    {
+      "chapter": "01-core-database.md",
+      "verifiedCodeBlocks": 12,
+      "unmatched": []
+    },
+    {
+      "chapter": "02-papers-ai.md",
+      "verifiedCodeBlocks": 57,
+      "unmatched": []
+    },
+    {
+      "chapter": "03-frontend.md",
+      "verifiedCodeBlocks": 72,
+      "unmatched": []
+    },
+    {
+      "chapter": "04-statistics-exports.md",
+      "verifiedCodeBlocks": 52,
+      "unmatched": []
+    },
+    {
+      "chapter": "05-tests-scripts.md",
+      "verifiedCodeBlocks": 86,
+      "unmatched": []
+    }
+  ],
+  "browser": {
+    "engine": "Playwright Chromium",
+    "displayedFiles": 60,
+    "filenameFiltering": true,
+    "fullTextFiltering": true,
+    "functionJump": "backend/app/stats_engine.py:204",
+    "mobileNoHorizontalOverflow": true,
+    "pageErrors": [],
+    "functionJumpVisible": true,
+    "targetLineY": 187.8125,
+    "sourcePaneScrollTop": 4336
+  },
+  "snapshotsMatchOriginalHashes": true
+}

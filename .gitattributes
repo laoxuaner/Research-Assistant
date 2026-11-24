@@ -1,0 +1,10 @@
+# Preserve exact file bytes across platforms for source and data hash checks.
+* -text
+
+# Treat research fixtures and screenshots as binary files.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.xlsx binary
+*.zip binary

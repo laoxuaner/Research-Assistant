@@ -1,0 +1,10 @@
+[project]
+name = "research-workbench"
+version = "1.0.0"
+description = "Local evidence-grounded research and experiment workbench"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+pythonpath = ["backend"]
+testpaths = ["backend/tests"]
+addopts = "-ra"

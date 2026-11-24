@@ -1,0 +1,186 @@
+import { formatNumber } from "./numeric";
+export type Project = {
+  id: string;
+  name: string;
+  question: string;
+  hypothesis: string;
+  tags: string[];
+  notes: string;
+  archived: boolean;
+};
+export type Paper = {
+  id: string;
+  title: string;
+  authors: string;
+  year: number | null;
+  doi: string;
+  tags: string[];
+  reading_status: string;
+  notes: string;
+  status: string;
+  error?: string;
+  filename: string;
+  size_bytes: number;
+  page_count: number;
+  created_at: string;
+  pages?: { page_number: number; text: string }[];
+};
+export type Citation = {
+  paper_id: string;
+  chunk_id: string;
+  title: string;
+  page_number: number;
+  quote: string;
+  score?: number;
+};
+export type Job = {
+  id: string;
+  kind: string;
+  status: string;
+  error?: string;
+  resource_id: string;
+  created_at: string;
+};
+export type Settings = {
+  chat_configured: boolean;
+  embedding_configured: boolean;
+  ai_enabled: boolean;
+  chat_model: string;
+  embedding_model: string;
+  chat_base_url: string;
+  embedding_base_url: string;
+  limits: Record<string, unknown>;
+};
+export type Dataset = {
+  id: string;
+  filename: string;
+  sha256: string;
+  parent_id?: string;
+  sheet?: string;
+  sheets: string[];
+  columns: string[];
+  row_count: number;
+  preview: Record<string, unknown>[];
+  quality: Record<string, unknown>;
+  transform: Record<string, unknown>;
+  created_at: string;
+};
+export type AnalysisConfig = {
+  group_column: string;
+  metric_column: string;
+  group_a: string;
+  group_b: string;
+  design: "descriptive" | "independent" | "paired";
+  experimental_unit: string;
+  missing_policy: "error" | "drop";
+  alternative: "two-sided" | "less" | "greater";
+  pair_column?: string;
+  sample_id_column?: string;
+  unit: string;
+  direction: "higher" | "lower";
+  confirmed: boolean;
+};
+export type Result = {
+  summary: {
+    group: string;
+    n: number;
+    mean: number | null;
+    median: number | null;
+    std: number | null;
+    min: number | null;
+    max: number | null;
+  }[];
+  comparison: {
+    difference?: number | null;
+    relative_change_percent?: number | null;
+    ci_low?: number | null;
+    ci_high?: number | null;
+    pvalue?: number | null;
+    statistic?: number | null;
+    df?: number | null;
+    method?: string;
+    status?: string;
+    reason?: string;
+  };
+  points: { group: string; value: number; pair_id?: string }[];
+  warnings: string[];
+  exclusions: unknown[];
+  config: AnalysisConfig;
+};
+export type Analysis = {
+  id: string;
+  result: Result;
+  config: AnalysisConfig;
+  dataset_id: string;
+  created_at: string;
+};
+export type Experiment = {
+  id: string;
+  name: string;
+  hypothesis: string;
+  paper_ids: string[];
+  conditions: string;
+  parameters: string;
+  notes: string;
+  datasets?: Dataset[];
+  analyses?: Analysis[];
+  created_at: string;
+};
+export type Report = {
+  id: string;
+  title: string;
+  analysis_id: string;
+  markdown: string;
+  created_at: string;
+};
+export type Message = {
+  role: string;
+  content: string;
+  citations: Citation[];
+  mode?: string;
+};
+export type Conversation = { id: string; title?: string; messages: Message[] };
+export type ReadingField = {
+  name: string;
+  text: string;
+  citations: Citation[];
+};
+export const fmt = formatNumber;
+export const date = (v: string) =>
+  v
+    ? new Date(v).toLocaleString("zh-CN", {
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "—";
+export async function api<T = unknown>(
+  path: string,
+  options: RequestInit = {},
+): Promise<T> {
+  const response = await fetch("/api" + path, {
+    ...options,
+    headers:
+      options.body instanceof FormData
+        ? options.headers
+        : { "Content-Type": "application/json", ...options.headers },
+  });
+  if (!response.ok) {
+    let message = response.statusText;
+    try {
+      const body = await response.json();
+      message =
+        typeof body.detail === "string"
+          ? body.detail
+          : JSON.stringify(body.detail || body);
+    } catch {}
+    throw new Error(message || "请求失败");
+  }
+  if (response.status === 204) return undefined as T;
+  return response.json();
+}
+export const json = (data: unknown): RequestInit => ({
+  method: "POST",
+  body: JSON.stringify(data),
+});

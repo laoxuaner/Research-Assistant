@@ -1,0 +1,2621 @@
+{
+  "file_count": 60,
+  "line_count": 16737,
+  "code_config_file_count": 52,
+  "code_config_lines": 11498,
+  "scope": "项目自有源码、测试、脚本、配置及文本测试材料；排除第三方依赖、PDF.js字体/字符表、缓存、构建产物、真实.env与用户data。",
+  "files": [
+    {
+      "path": ".env.example",
+      "lines": 24,
+      "sha256": "1cebf79d5ce87b61c57782956ce795f543bd3cd62d19bdc9c7b2ce7ef72ebce3",
+      "category": "配置",
+      "definitions": [],
+      "source_page": "source/01.md"
+    },
+    {
+      "path": ".gitignore",
+      "lines": 12,
+      "sha256": "a6f703a17f905c30c17233a0a5e33a83af05c0573a3ec98ee5d38bb3b6bbcf71",
+      "category": "配置",
+      "definitions": [],
+      "source_page": "source/02.md"
+    },
+    {
+      "path": "backend/app/__init__.py",
+      "lines": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "category": "后端",
+      "definitions": [],
+      "source_page": "source/03.md"
+    },
+    {
+      "path": "backend/app/api_core.py",
+      "lines": 224,
+      "sha256": "ab1b0b2f3583f404509ac18b6016b15b42c10dadd83b64a2fa94246c52da263d",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "health",
+          "line": 18,
+          "end": 18
+        },
+        {
+          "name": "settings",
+          "line": 21,
+          "end": 30
+        },
+        {
+          "name": "update_settings",
+          "line": 33,
+          "end": 38
+        },
+        {
+          "name": "projects",
+          "line": 41,
+          "end": 42
+        },
+        {
+          "name": "create_project",
+          "line": 45,
+          "end": 47
+        },
+        {
+          "name": "update_project",
+          "line": 50,
+          "end": 54
+        },
+        {
+          "name": "overview",
+          "line": 57,
+          "end": 63
+        },
+        {
+          "name": "overview.count",
+          "line": 59,
+          "end": 59
+        },
+        {
+          "name": "list_papers",
+          "line": 66,
+          "end": 68
+        },
+        {
+          "name": "store_paper",
+          "line": 70,
+          "end": 85
+        },
+        {
+          "name": "upload_papers",
+          "line": 88,
+          "end": 108
+        },
+        {
+          "name": "get_paper",
+          "line": 111,
+          "end": 115
+        },
+        {
+          "name": "update_paper",
+          "line": 118,
+          "end": 126
+        },
+        {
+          "name": "remove_paper",
+          "line": 129,
+          "end": 136
+        },
+        {
+          "name": "paper_file",
+          "line": 139,
+          "end": 142
+        },
+        {
+          "name": "retry_paper",
+          "line": 145,
+          "end": 152
+        },
+        {
+          "name": "jobs",
+          "line": 155,
+          "end": 157
+        },
+        {
+          "name": "search",
+          "line": 160,
+          "end": 162
+        },
+        {
+          "name": "ask",
+          "line": 165,
+          "end": 175
+        },
+        {
+          "name": "conversations",
+          "line": 178,
+          "end": 189
+        },
+        {
+          "name": "reading_card",
+          "line": 192,
+          "end": 194
+        },
+        {
+          "name": "compare",
+          "line": 197,
+          "end": 206
+        },
+        {
+          "name": "embedding_status",
+          "line": 209,
+          "end": 213
+        },
+        {
+          "name": "rebuild",
+          "line": 216,
+          "end": 224
+        }
+      ],
+      "source_page": "source/04.md"
+    },
+    {
+      "path": "backend/app/api_experiments.py",
+      "lines": 245,
+      "sha256": "bf15a5ce35eaf9a56fa17053853b2654dab9ee72d2c5693a2f5ffd2832639edc",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "RunInput",
+          "line": 25,
+          "end": 28
+        },
+        {
+          "name": "versions",
+          "line": 31,
+          "end": 33
+        },
+        {
+          "name": "hash_file",
+          "line": 35,
+          "end": 36
+        },
+        {
+          "name": "verify_dataset",
+          "line": 38,
+          "end": 40
+        },
+        {
+          "name": "load_version",
+          "line": 42,
+          "end": 49
+        },
+        {
+          "name": "validate_shape",
+          "line": 51,
+          "end": 53
+        },
+        {
+          "name": "experiments",
+          "line": 56,
+          "end": 58
+        },
+        {
+          "name": "create_experiment",
+          "line": 61,
+          "end": 64
+        },
+        {
+          "name": "get_experiment",
+          "line": 67,
+          "end": 71
+        },
+        {
+          "name": "upload_dataset",
+          "line": 74,
+          "end": 105
+        },
+        {
+          "name": "preview_dataset",
+          "line": 108,
+          "end": 118
+        },
+        {
+          "name": "clean_dataset",
+          "line": 121,
+          "end": 141
+        },
+        {
+          "name": "run_analysis",
+          "line": 144,
+          "end": 160
+        },
+        {
+          "name": "get_analysis",
+          "line": 163,
+          "end": 164
+        },
+        {
+          "name": "plot",
+          "line": 167,
+          "end": 170
+        },
+        {
+          "name": "suggest",
+          "line": 173,
+          "end": 194
+        },
+        {
+          "name": "reports",
+          "line": 197,
+          "end": 199
+        },
+        {
+          "name": "create_report",
+          "line": 202,
+          "end": 226
+        },
+        {
+          "name": "download_report",
+          "line": 229,
+          "end": 245
+        }
+      ],
+      "source_page": "source/05.md"
+    },
+    {
+      "path": "backend/app/config.py",
+      "lines": 31,
+      "sha256": "334150ddc3d097748ba6c8ea9d6319272ae74852f36f4f25d5371bb678dcad99",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "Settings",
+          "line": 6,
+          "end": 31
+        },
+        {
+          "name": "Settings.directory",
+          "line": 29,
+          "end": 31
+        }
+      ],
+      "source_page": "source/06.md"
+    },
+    {
+      "path": "backend/app/db.py",
+      "lines": 33,
+      "sha256": "51bf6e75a6130070622b000073f9f03ac9c9ee27626e0cd363cd8b09214dd28e",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "Database",
+          "line": 6,
+          "end": 29
+        },
+        {
+          "name": "Database.__init__",
+          "line": 7,
+          "end": 15
+        },
+        {
+          "name": "Database.__init__.configure",
+          "line": 11,
+          "end": 14
+        },
+        {
+          "name": "Database.migrate",
+          "line": 17,
+          "end": 19
+        },
+        {
+          "name": "Database.session",
+          "line": 22,
+          "end": 29
+        },
+        {
+          "name": "serialize",
+          "line": 31,
+          "end": 33
+        }
+      ],
+      "source_page": "source/07.md"
+    },
+    {
+      "path": "backend/app/demo.py",
+      "lines": 67,
+      "sha256": "47d830264ce15f8c88522bdd893989876e71741fb93d65c4806f4bdfe00898a6",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "import_demo",
+          "line": 17,
+          "end": 67
+        }
+      ],
+      "source_page": "source/08.md"
+    },
+    {
+      "path": "backend/app/deps.py",
+      "lines": 23,
+      "sha256": "3a3706cad514b46ca8586c9a8a7061d1e0579b2a216c822eef8270f0f4cc493f",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "session",
+          "line": 5,
+          "end": 7
+        },
+        {
+          "name": "project",
+          "line": 9,
+          "end": 12
+        },
+        {
+          "name": "scoped",
+          "line": 14,
+          "end": 18
+        },
+        {
+          "name": "paper_ids",
+          "line": 20,
+          "end": 23
+        }
+      ],
+      "source_page": "source/09.md"
+    },
+    {
+      "path": "backend/app/exports.py",
+      "lines": 353,
+      "sha256": "14909aa39be094feb0134c99536c389f11fec7b8bb7031fdd93dc1536c8da4d7",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "_json",
+          "line": 28,
+          "end": 29
+        },
+        {
+          "name": "_label",
+          "line": 32,
+          "end": 33
+        },
+        {
+          "name": "_number",
+          "line": 36,
+          "end": 39
+        },
+        {
+          "name": "_font",
+          "line": 42,
+          "end": 49
+        },
+        {
+          "name": "render_plot",
+          "line": 52,
+          "end": 119
+        },
+        {
+          "name": "build_markdown",
+          "line": 122,
+          "end": 229
+        },
+        {
+          "name": "_summary_csv",
+          "line": 232,
+          "end": 244
+        },
+        {
+          "name": "build_export",
+          "line": 296,
+          "end": 353
+        }
+      ],
+      "source_page": "source/10.md"
+    },
+    {
+      "path": "backend/app/main.py",
+      "lines": 68,
+      "sha256": "453791752dc78437a375a1f2e556b17dae0a61a7b31c3f06966416bcebae93bb",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "create_app",
+          "line": 15,
+          "end": 66
+        },
+        {
+          "name": "create_app.lifespan",
+          "line": 21,
+          "end": 25
+        },
+        {
+          "name": "create_app.local_origin",
+          "line": 37,
+          "end": 43
+        },
+        {
+          "name": "create_app.provider_error",
+          "line": 46,
+          "end": 46
+        },
+        {
+          "name": "create_app.validation_error",
+          "line": 48,
+          "end": 48
+        },
+        {
+          "name": "create_app.value_error",
+          "line": 50,
+          "end": 50
+        },
+        {
+          "name": "create_app.frontend",
+          "line": 58,
+          "end": 65
+        }
+      ],
+      "source_page": "source/11.md"
+    },
+    {
+      "path": "backend/app/migrations.py",
+      "lines": 13,
+      "sha256": "b5fa5b66dd8bd4fdb71127a25e8811d7a3f1ab33a99314759bef7819564502aa",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "migrate",
+          "line": 5,
+          "end": 13
+        }
+      ],
+      "source_page": "source/12.md"
+    },
+    {
+      "path": "backend/app/models.py",
+      "lines": 157,
+      "sha256": "c7108a59293850af6879dea217175450d537dde6c2d282f88392ba5636f31bd6",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "uid",
+          "line": 7,
+          "end": 7
+        },
+        {
+          "name": "now",
+          "line": 8,
+          "end": 8
+        },
+        {
+          "name": "Entity",
+          "line": 10,
+          "end": 12
+        },
+        {
+          "name": "Project",
+          "line": 14,
+          "end": 22
+        },
+        {
+          "name": "Paper",
+          "line": 24,
+          "end": 42
+        },
+        {
+          "name": "PaperPage",
+          "line": 44,
+          "end": 49
+        },
+        {
+          "name": "Chunk",
+          "line": 51,
+          "end": 59
+        },
+        {
+          "name": "Embedding",
+          "line": 61,
+          "end": 70
+        },
+        {
+          "name": "Note",
+          "line": 72,
+          "end": 76
+        },
+        {
+          "name": "Conversation",
+          "line": 78,
+          "end": 81
+        },
+        {
+          "name": "Message",
+          "line": 83,
+          "end": 89
+        },
+        {
+          "name": "Citation",
+          "line": 91,
+          "end": 98
+        },
+        {
+          "name": "Experiment",
+          "line": 100,
+          "end": 108
+        },
+        {
+          "name": "DatasetVersion",
+          "line": 110,
+          "end": 126
+        },
+        {
+          "name": "AnalysisRun",
+          "line": 128,
+          "end": 135
+        },
+        {
+          "name": "Report",
+          "line": 137,
+          "end": 143
+        },
+        {
+          "name": "Job",
+          "line": 145,
+          "end": 152
+        },
+        {
+          "name": "Preference",
+          "line": 154,
+          "end": 157
+        }
+      ],
+      "source_page": "source/13.md"
+    },
+    {
+      "path": "backend/app/papers.py",
+      "lines": 119,
+      "sha256": "a74c2d49a8b34386220ca9769b5bf1d7335ce446ebec80f50d928b9c0a63b09a",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "tokenize",
+          "line": 13,
+          "end": 19
+        },
+        {
+          "name": "split_page",
+          "line": 21,
+          "end": 27
+        },
+        {
+          "name": "parse_job",
+          "line": 29,
+          "end": 75
+        },
+        {
+          "name": "fail_job",
+          "line": 77,
+          "end": 83
+        },
+        {
+          "name": "allowed_papers",
+          "line": 85,
+          "end": 91
+        },
+        {
+          "name": "citation",
+          "line": 93,
+          "end": 97
+        },
+        {
+          "name": "keyword_search",
+          "line": 99,
+          "end": 111
+        },
+        {
+          "name": "recover_jobs",
+          "line": 113,
+          "end": 119
+        }
+      ],
+      "source_page": "source/14.md"
+    },
+    {
+      "path": "backend/app/parse_pdf.py",
+      "lines": 29,
+      "sha256": "60952047c4691d21d6b93f72487f641ea9b212793eea9e67e14ba792413b7ddc",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "parse",
+          "line": 6,
+          "end": 22
+        }
+      ],
+      "source_page": "source/15.md"
+    },
+    {
+      "path": "backend/app/providers.py",
+      "lines": 76,
+      "sha256": "bcfb2a245e0c6892226aace105124144713fb4e1cc5f509d69f7a572350ec00f",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "ProviderError",
+          "line": 8,
+          "end": 8
+        },
+        {
+          "name": "ChatProvider",
+          "line": 9,
+          "end": 10
+        },
+        {
+          "name": "ChatProvider.generate",
+          "line": 10,
+          "end": 10
+        },
+        {
+          "name": "EmbeddingProvider",
+          "line": 11,
+          "end": 12
+        },
+        {
+          "name": "EmbeddingProvider.embed",
+          "line": 12,
+          "end": 12
+        },
+        {
+          "name": "configured",
+          "line": 14,
+          "end": 16
+        },
+        {
+          "name": "request_json",
+          "line": 18,
+          "end": 39
+        },
+        {
+          "name": "CompatibleChatProvider",
+          "line": 41,
+          "end": 60
+        },
+        {
+          "name": "CompatibleChatProvider.__init__",
+          "line": 43,
+          "end": 43
+        },
+        {
+          "name": "CompatibleChatProvider.generate",
+          "line": 44,
+          "end": 60
+        },
+        {
+          "name": "CompatibleEmbeddingProvider",
+          "line": 62,
+          "end": 76
+        },
+        {
+          "name": "CompatibleEmbeddingProvider.__init__",
+          "line": 63,
+          "end": 63
+        },
+        {
+          "name": "CompatibleEmbeddingProvider.embed",
+          "line": 64,
+          "end": 76
+        }
+      ],
+      "source_page": "source/16.md"
+    },
+    {
+      "path": "backend/app/research.py",
+      "lines": 184,
+      "sha256": "8866bd06a2b9941b2d2ddb1c48ee9f9f690005a6192bacd9cd654ef9ce2e766d",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "enabled",
+          "line": 20,
+          "end": 22
+        },
+        {
+          "name": "chat_ready",
+          "line": 24,
+          "end": 25
+        },
+        {
+          "name": "embedding_ready",
+          "line": 27,
+          "end": 28
+        },
+        {
+          "name": "fingerprint",
+          "line": 30,
+          "end": 32
+        },
+        {
+          "name": "bounded_evidence",
+          "line": 34,
+          "end": 43
+        },
+        {
+          "name": "validate_citations",
+          "line": 45,
+          "end": 59
+        },
+        {
+          "name": "search",
+          "line": 61,
+          "end": 99
+        },
+        {
+          "name": "answer",
+          "line": 101,
+          "end": 130
+        },
+        {
+          "name": "reading_card",
+          "line": 132,
+          "end": 150
+        },
+        {
+          "name": "rebuild_embeddings",
+          "line": 152,
+          "end": 184
+        }
+      ],
+      "source_page": "source/17.md"
+    },
+    {
+      "path": "backend/app/schemas.py",
+      "lines": 76,
+      "sha256": "a8f6faf87e4d454560ff2b68004ed2a958256848c5f6c7595b2c7eaad0695a27",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "Input",
+          "line": 4,
+          "end": 5
+        },
+        {
+          "name": "ProjectInput",
+          "line": 7,
+          "end": 13
+        },
+        {
+          "name": "ProjectPatch",
+          "line": 15,
+          "end": 21
+        },
+        {
+          "name": "PaperPatch",
+          "line": 23,
+          "end": 30
+        },
+        {
+          "name": "SearchInput",
+          "line": 32,
+          "end": 37
+        },
+        {
+          "name": "AskInput",
+          "line": 39,
+          "end": 42
+        },
+        {
+          "name": "CompareInput",
+          "line": 44,
+          "end": 49
+        },
+        {
+          "name": "CompareInput.unique",
+          "line": 47,
+          "end": 49
+        },
+        {
+          "name": "ExperimentInput",
+          "line": 51,
+          "end": 57
+        },
+        {
+          "name": "CleanInput",
+          "line": 59,
+          "end": 61
+        },
+        {
+          "name": "SuggestInput",
+          "line": 63,
+          "end": 65
+        },
+        {
+          "name": "ReportInput",
+          "line": 67,
+          "end": 69
+        },
+        {
+          "name": "SettingsInput",
+          "line": 71,
+          "end": 72
+        },
+        {
+          "name": "NoteInput",
+          "line": 74,
+          "end": 76
+        }
+      ],
+      "source_page": "source/18.md"
+    },
+    {
+      "path": "backend/app/stats_engine.py",
+      "lines": 386,
+      "sha256": "dcea042eb2f6913aee3055acb91ad84a63cca4870d8d64fa878a92ddf0a69954",
+      "category": "后端",
+      "definitions": [
+        {
+          "name": "AnalysisConfig",
+          "line": 14,
+          "end": 43
+        },
+        {
+          "name": "AnalysisConfig.validate_design",
+          "line": 31,
+          "end": 43
+        },
+        {
+          "name": "json_safe",
+          "line": 46,
+          "end": 72
+        },
+        {
+          "name": "read_dataset",
+          "line": 75,
+          "end": 102
+        },
+        {
+          "name": "_missing",
+          "line": 105,
+          "end": 107
+        },
+        {
+          "name": "_numeric",
+          "line": 110,
+          "end": 112
+        },
+        {
+          "name": "profile_dataframe",
+          "line": 115,
+          "end": 149
+        },
+        {
+          "name": "apply_transforms",
+          "line": 152,
+          "end": 178
+        },
+        {
+          "name": "_stable_mean",
+          "line": 181,
+          "end": 183
+        },
+        {
+          "name": "_stable_std",
+          "line": 186,
+          "end": 189
+        },
+        {
+          "name": "_summary",
+          "line": 192,
+          "end": 201
+        },
+        {
+          "name": "analyze",
+          "line": 204,
+          "end": 386
+        }
+      ],
+      "source_page": "source/19.md"
+    },
+    {
+      "path": "backend/tests/test_api.py",
+      "lines": 308,
+      "sha256": "14bc1e940a80780159a4285798f47ad7012b78b49b0e53fc1f0cbe8201a9e085",
+      "category": "测试",
+      "definitions": [
+        {
+          "name": "client",
+          "line": 18,
+          "end": 22
+        },
+        {
+          "name": "project",
+          "line": 24,
+          "end": 27
+        },
+        {
+          "name": "upload",
+          "line": 29,
+          "end": 33
+        },
+        {
+          "name": "experiment",
+          "line": 35,
+          "end": 38
+        },
+        {
+          "name": "dataset",
+          "line": 40,
+          "end": 45
+        },
+        {
+          "name": "config",
+          "line": 47,
+          "end": 50
+        },
+        {
+          "name": "run",
+          "line": 52,
+          "end": 55
+        },
+        {
+          "name": "test_empty_workspace_project_lifecycle_settings_no_secrets",
+          "line": 57,
+          "end": 66
+        },
+        {
+          "name": "test_real_pdf_parse_search_dedupe_delete_and_scope",
+          "line": 68,
+          "end": 88
+        },
+        {
+          "name": "test_metadata_filters_and_notes",
+          "line": 90,
+          "end": 96
+        },
+        {
+          "name": "test_offline_evidence_no_fabricated_answer_and_no_evidence",
+          "line": 98,
+          "end": 106
+        },
+        {
+          "name": "GroundedChat",
+          "line": 108,
+          "end": 113
+        },
+        {
+          "name": "GroundedChat.generate",
+          "line": 109,
+          "end": 113
+        },
+        {
+          "name": "ForgedChat",
+          "line": 115,
+          "end": 117
+        },
+        {
+          "name": "ForgedChat.generate",
+          "line": 116,
+          "end": 117
+        },
+        {
+          "name": "enable_chat",
+          "line": 119,
+          "end": 123
+        },
+        {
+          "name": "test_model_contract_valid_and_forged_citations",
+          "line": 125,
+          "end": 132
+        },
+        {
+          "name": "test_ocr_corrupt_retry_and_invalid_upload",
+          "line": 134,
+          "end": 145
+        },
+        {
+          "name": "test_persist_restart_and_interrupted_job",
+          "line": 147,
+          "end": 161
+        },
+        {
+          "name": "test_timeout_is_explicit",
+          "line": 163,
+          "end": 172
+        },
+        {
+          "name": "test_timeout_is_explicit.timeout",
+          "line": 169,
+          "end": 169
+        },
+        {
+          "name": "test_analysis_report_and_all_exports",
+          "line": 174,
+          "end": 195
+        },
+        {
+          "name": "test_sheet_preview_is_read_only_and_version_bound",
+          "line": 197,
+          "end": 204
+        },
+        {
+          "name": "test_cleaning_is_new_version_and_hash_tampering_detected",
+          "line": 206,
+          "end": 219
+        },
+        {
+          "name": "test_no_confirmation_and_unsafe_origin_rejected",
+          "line": 221,
+          "end": 225
+        },
+        {
+          "name": "test_demo_explicit_idempotent_real_data",
+          "line": 227,
+          "end": 235
+        },
+        {
+          "name": "NullClaimsChat",
+          "line": 238,
+          "end": 239
+        },
+        {
+          "name": "NullClaimsChat.generate",
+          "line": 239,
+          "end": 239
+        },
+        {
+          "name": "test_malformed_model_output_is_actionable_not_server_crash",
+          "line": 241,
+          "end": 245
+        },
+        {
+          "name": "FixedEmbedding",
+          "line": 247,
+          "end": 249
+        },
+        {
+          "name": "FixedEmbedding.embed",
+          "line": 249,
+          "end": 249
+        },
+        {
+          "name": "test_hybrid_scope_selected_paper_and_dimension_change",
+          "line": 251,
+          "end": 275
+        },
+        {
+          "name": "test_cleaned_xlsx_export_retains_original_sheet_and_code",
+          "line": 277,
+          "end": 290
+        },
+        {
+          "name": "test_failed_database_commit_never_returns_success",
+          "line": 293,
+          "end": 308
+        },
+        {
+          "name": "test_failed_database_commit_never_returns_success.fail_commit",
+          "line": 297,
+          "end": 300
+        }
+      ],
+      "source_page": "source/20.md"
+    },
+    {
+      "path": "backend/tests/test_exports.py",
+      "lines": 218,
+      "sha256": "e3b30b464a76b04a437a2960ee0441a5a790269c3209b5f95d30f5fa5ab95b46",
+      "category": "测试",
+      "definitions": [
+        {
+          "name": "fixture_context",
+          "line": 16,
+          "end": 35
+        },
+        {
+          "name": "frame",
+          "line": 38,
+          "end": 42
+        },
+        {
+          "name": "test_plot_is_valid_png_with_real_data",
+          "line": 46,
+          "end": 50
+        },
+        {
+          "name": "test_report_uses_saved_numbers_and_evidence",
+          "line": 53,
+          "end": 63
+        },
+        {
+          "name": "test_unsupported_design_report_has_no_fake_pvalue",
+          "line": 66,
+          "end": 73
+        },
+        {
+          "name": "write_bundle",
+          "line": 76,
+          "end": 80
+        },
+        {
+          "name": "run_reproduction",
+          "line": 83,
+          "end": 90
+        },
+        {
+          "name": "test_self_contained_export_replays_original_cleaning_chain",
+          "line": 93,
+          "end": 131
+        },
+        {
+          "name": "test_xlsx_selected_sheet_reproduces",
+          "line": 134,
+          "end": 146
+        },
+        {
+          "name": "test_export_rejects_original_hash_mismatch",
+          "line": 149,
+          "end": 154
+        },
+        {
+          "name": "test_csv_summary_uses_same_saved_numbers_and_escapes_formulas",
+          "line": 157,
+          "end": 169
+        },
+        {
+          "name": "test_cleaned_xlsx_export_keeps_original_extension_and_literal_ids",
+          "line": 171,
+          "end": 194
+        },
+        {
+          "name": "test_saved_engine_and_versions_are_exported_instead_of_current_runtime",
+          "line": 197,
+          "end": 218
+        }
+      ],
+      "source_page": "source/21.md"
+    },
+    {
+      "path": "backend/tests/test_providers.py",
+      "lines": 64,
+      "sha256": "99ee6c2fdb30a500ff35e8d288370e2e2fc487424f9d20a2e8c643ff345b33b8",
+      "category": "测试",
+      "definitions": [
+        {
+          "name": "test_compatible_chat_and_embedding_wire_contract",
+          "line": 9,
+          "end": 27
+        },
+        {
+          "name": "test_compatible_chat_and_embedding_wire_contract.handle",
+          "line": 12,
+          "end": 18
+        },
+        {
+          "name": "test_provider_errors_sanitized_and_finite_retries",
+          "line": 29,
+          "end": 39
+        },
+        {
+          "name": "test_provider_errors_sanitized_and_finite_retries.handle",
+          "line": 32,
+          "end": 34
+        },
+        {
+          "name": "test_nonfinite_vectors_and_nonobject_chat_rejected",
+          "line": 41,
+          "end": 51
+        },
+        {
+          "name": "test_nonfinite_vectors_and_nonobject_chat_rejected.handle",
+          "line": 44,
+          "end": 46
+        },
+        {
+          "name": "test_reference_quote_page_and_bool_validation",
+          "line": 53,
+          "end": 59
+        },
+        {
+          "name": "test_provider_local_configuration",
+          "line": 61,
+          "end": 64
+        }
+      ],
+      "source_page": "source/22.md"
+    },
+    {
+      "path": "backend/tests/test_stats.py",
+      "lines": 249,
+      "sha256": "a5fc23491fdbf05514458b6fc946284e4b737779937b72846c3f7ab9d303a886",
+      "category": "测试",
+      "definitions": [
+        {
+          "name": "independent_config",
+          "line": 11,
+          "end": 18
+        },
+        {
+          "name": "small_data",
+          "line": 21,
+          "end": 26
+        },
+        {
+          "name": "test_welch_known_reference_and_b_minus_a",
+          "line": 29,
+          "end": 44
+        },
+        {
+          "name": "test_single_sided_pvalue_is_for_b_minus_a_and_ci_stays_two_sided",
+          "line": 47,
+          "end": 54
+        },
+        {
+          "name": "test_strict_pairing_matches_by_id_not_row_order",
+          "line": 57,
+          "end": 74
+        },
+        {
+          "name": "test_inference_requires_explicit_design_confirmation",
+          "line": 81,
+          "end": 83
+        },
+        {
+          "name": "test_duplicate_independent_units_retains_description_without_test",
+          "line": 86,
+          "end": 93
+        },
+        {
+          "name": "test_duplicate_unit_not_hidden_by_metric_exclusion",
+          "line": 96,
+          "end": 101
+        },
+        {
+          "name": "test_duplicate_or_unmatched_pairs_are_not_silently_deleted",
+          "line": 108,
+          "end": 113
+        },
+        {
+          "name": "test_pairwise_metric_exclusion_removes_whole_pair_with_audit",
+          "line": 116,
+          "end": 126
+        },
+        {
+          "name": "test_missing_invalid_and_infinite_values_are_explicit",
+          "line": 129,
+          "end": 138
+        },
+        {
+          "name": "test_empty_group_zero_baseline_and_constant_values_are_safe",
+          "line": 141,
+          "end": 151
+        },
+        {
+          "name": "test_paired_constant_differences_do_not_emit_fake_significance",
+          "line": 154,
+          "end": 159
+        },
+        {
+          "name": "test_profile_marks_outliers_and_preserves_input",
+          "line": 162,
+          "end": 173
+        },
+        {
+          "name": "test_whitelisted_transforms_audit_and_do_not_mutate_source",
+          "line": 176,
+          "end": 184
+        },
+        {
+          "name": "test_csv_and_xlsx_sheet_selection_and_profile",
+          "line": 187,
+          "end": 201
+        },
+        {
+          "name": "test_read_dataset_preserves_identifiers_precision_and_literal_na",
+          "line": 203,
+          "end": 209
+        },
+        {
+          "name": "test_paired_repeated_subjects_are_rejected_even_with_unique_trial_pairs",
+          "line": 212,
+          "end": 221
+        },
+        {
+          "name": "test_welch_is_scale_invariant_without_underflow_or_overflow",
+          "line": 224,
+          "end": 233
+        },
+        {
+          "name": "test_paired_exact_constant_differences_remain_unsupported_after_scaling",
+          "line": 236,
+          "end": 240
+        },
+        {
+          "name": "test_internal_column_conflicts_are_rejected_without_mutating_input",
+          "line": 243,
+          "end": 249
+        }
+      ],
+      "source_page": "source/23.md"
+    },
+    {
+      "path": "docs/code-guide/build_code_book.py",
+      "lines": 247,
+      "sha256": "f0716399bb954ba8f7f7a592e32689c42acfba3524b710ca08473d2a07f3fdfa",
+      "category": "教学工具",
+      "definitions": [
+        {
+          "name": "collect_paths",
+          "line": 25,
+          "end": 41
+        },
+        {
+          "name": "line_count",
+          "line": 43,
+          "end": 44
+        },
+        {
+          "name": "definitions",
+          "line": 46,
+          "end": 71
+        },
+        {
+          "name": "category",
+          "line": 73,
+          "end": 88
+        },
+        {
+          "name": "main",
+          "line": 90,
+          "end": 244
+        }
+      ],
+      "source_page": "source/24.md"
+    },
+    {
+      "path": "docs/guide-example-statistics.py",
+      "lines": 131,
+      "sha256": "f8a1c157d976e6926c2f106236c3134d55e5a09355c92ca6131faf4335a84669",
+      "category": "教学工具",
+      "definitions": [
+        {
+          "name": "main",
+          "line": 22,
+          "end": 127
+        }
+      ],
+      "source_page": "source/25.md"
+    },
+    {
+      "path": "frontend/copy-pdf-assets.mjs",
+      "lines": 10,
+      "sha256": "e040c56fb593b2feff8bc9c912c9ca85cedf6c287dd2c8974c23ad3114e268a7",
+      "category": "配置",
+      "definitions": [],
+      "source_page": "source/26.md"
+    },
+    {
+      "path": "frontend/index.html",
+      "lines": 13,
+      "sha256": "e9a7f438b8a8962b25d662c9b33f04896d04ccd0fc6f6a37420155c288ed96b7",
+      "category": "配置",
+      "definitions": [],
+      "source_page": "source/27.md"
+    },
+    {
+      "path": "frontend/package-lock.json",
+      "lines": 5031,
+      "sha256": "e3b2aa0d07e6e8ec81e742a1fb0ba66ce8e482320f9361281c763935e6c5b06d",
+      "category": "依赖锁文件",
+      "definitions": [],
+      "source_page": "source/28.md"
+    },
+    {
+      "path": "frontend/package.json",
+      "lines": 37,
+      "sha256": "5324a1a4aadfc8b46d104a1f58602f25ee5476e49616ea65704e6a6a9baecb09",
+      "category": "配置",
+      "definitions": [],
+      "source_page": "source/29.md"
+    },
+    {
+      "path": "frontend/playwright.config.ts",
+      "lines": 48,
+      "sha256": "9c3c7aa23027251dcbd4e769517003ca39fc94c16ee0b408e0cc2a338cb4627c",
+      "category": "配置",
+      "definitions": [
+        {
+          "name": "root",
+          "line": 4
+        },
+        {
+          "name": "python",
+          "line": 5
+        }
+      ],
+      "source_page": "source/30.md"
+    },
+    {
+      "path": "frontend/postcss.config.js",
+      "lines": 1,
+      "sha256": "08910ce1d5cd87d2167e9c78b77262bf985b3f07dc5037ff745ecd6a759fd0c0",
+      "category": "配置",
+      "definitions": [],
+      "source_page": "source/31.md"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "lines": 2043,
+      "sha256": "aeb4105f4851d38cfa87bd9b7ca3b42c9647999f9020bbe5662fa6cbda9ed50c",
+      "category": "前端",
+      "definitions": [
+        {
+          "name": "Project",
+          "line": 38
+        },
+        {
+          "name": "Paper",
+          "line": 39
+        },
+        {
+          "name": "Citation",
+          "line": 40
+        },
+        {
+          "name": "Settings",
+          "line": 41
+        },
+        {
+          "name": "Job",
+          "line": 42
+        },
+        {
+          "name": "Report",
+          "line": 43
+        },
+        {
+          "name": "Message",
+          "line": 44
+        },
+        {
+          "name": "Conversation",
+          "line": 45
+        },
+        {
+          "name": "ReadingField",
+          "line": 46
+        },
+        {
+          "name": "Page",
+          "line": 61
+        },
+        {
+          "name": "App",
+          "line": 86
+        },
+        {
+          "name": "notify",
+          "line": 104
+        },
+        {
+          "name": "t",
+          "line": 109
+        },
+        {
+          "name": "refresh",
+          "line": 112
+        },
+        {
+          "name": "loadProjects",
+          "line": 113
+        },
+        {
+          "name": "list",
+          "line": 114
+        },
+        {
+          "name": "t",
+          "line": 146
+        },
+        {
+          "name": "project",
+          "line": 153
+        },
+        {
+          "name": "importDemo",
+          "line": 154
+        },
+        {
+          "name": "r",
+          "line": 157
+        },
+        {
+          "name": "navigate",
+          "line": 168
+        },
+        {
+          "name": "openCitation",
+          "line": 172
+        },
+        {
+          "name": "onProjectSaved",
+          "line": 173
+        },
+        {
+          "name": "ProjectForm",
+          "line": 529
+        },
+        {
+          "name": "save",
+          "line": 549
+        },
+        {
+          "name": "data",
+          "line": 553
+        },
+        {
+          "name": "p",
+          "line": 560
+        },
+        {
+          "name": "Overview",
+          "line": 641
+        },
+        {
+          "name": "reloadOverview",
+          "line": 665
+        },
+        {
+          "name": "timer",
+          "line": 678
+        },
+        {
+          "name": "Library",
+          "line": 891
+        },
+        {
+          "name": "upload",
+          "line": 915
+        },
+        {
+          "name": "fd",
+          "line": 917
+        },
+        {
+          "name": "r",
+          "line": 921
+        },
+        {
+          "name": "search",
+          "line": 940
+        },
+        {
+          "name": "r",
+          "line": 945
+        },
+        {
+          "name": "retry",
+          "line": 968
+        },
+        {
+          "name": "deletePaper",
+          "line": 977
+        },
+        {
+          "name": "Scope",
+          "line": 1271
+        },
+        {
+          "name": "Chat",
+          "line": 1317
+        },
+        {
+          "name": "load",
+          "line": 1336
+        },
+        {
+          "name": "ask",
+          "line": 1346
+        },
+        {
+          "name": "q",
+          "line": 1349
+        },
+        {
+          "name": "r",
+          "line": 1354
+        },
+        {
+          "name": "Compare",
+          "line": 1532
+        },
+        {
+          "name": "run",
+          "line": 1550
+        },
+        {
+          "name": "r",
+          "line": 1553
+        },
+        {
+          "name": "Reports",
+          "line": 1667
+        },
+        {
+          "name": "kind",
+          "line": 1781
+        },
+        {
+          "name": "SettingsView",
+          "line": 1816
+        },
+        {
+          "name": "toggle",
+          "line": 1838
+        },
+        {
+          "name": "s",
+          "line": 1841
+        },
+        {
+          "name": "rebuild",
+          "line": 1853
+        }
+      ],
+      "source_page": "source/32.md"
+    },
+    {
+      "path": "frontend/src/Experiments.tsx",
+      "lines": 1489,
+      "sha256": "05bfd30f4bfb7a1a55a26abbaf9e99d1d875a28de28f630dccb8c498da7ef26e",
+      "category": "前端",
+      "definitions": [
+        {
+          "name": "FormEvent",
+          "line": 7
+        },
+        {
+          "name": "Analysis",
+          "line": 43
+        },
+        {
+          "name": "AnalysisConfig",
+          "line": 44
+        },
+        {
+          "name": "Dataset",
+          "line": 45
+        },
+        {
+          "name": "Experiment",
+          "line": 46
+        },
+        {
+          "name": "Paper",
+          "line": 47
+        },
+        {
+          "name": "Report",
+          "line": 48
+        },
+        {
+          "name": "Result",
+          "line": 49
+        },
+        {
+          "name": "Props",
+          "line": 60
+        },
+        {
+          "name": "Experiments",
+          "line": 83
+        },
+        {
+          "name": "selectedExperiment",
+          "line": 112
+        },
+        {
+          "name": "detailRequest",
+          "line": 114
+        },
+        {
+          "name": "loadDetail",
+          "line": 115
+        },
+        {
+          "name": "request",
+          "line": 118
+        },
+        {
+          "name": "d",
+          "line": 119
+        },
+        {
+          "name": "dataset",
+          "line": 161
+        },
+        {
+          "name": "update",
+          "line": 162
+        },
+        {
+          "name": "groups",
+          "line": 164
+        },
+        {
+          "name": "upload",
+          "line": 174
+        },
+        {
+          "name": "fd",
+          "line": 176
+        },
+        {
+          "name": "d",
+          "line": 182
+        },
+        {
+          "name": "cleanData",
+          "line": 198
+        },
+        {
+          "name": "d",
+          "line": 202
+        },
+        {
+          "name": "run",
+          "line": 226
+        },
+        {
+          "name": "a",
+          "line": 231
+        },
+        {
+          "name": "suggest",
+          "line": 245
+        },
+        {
+          "name": "r",
+          "line": 248
+        },
+        {
+          "name": "createReport",
+          "line": 268
+        },
+        {
+          "name": "selector",
+          "line": 288
+        },
+        {
+          "name": "ExperimentForm",
+          "line": 899
+        },
+        {
+          "name": "save",
+          "line": 921
+        },
+        {
+          "name": "x",
+          "line": 925
+        },
+        {
+          "name": "Quality",
+          "line": 1024
+        },
+        {
+          "name": "quality",
+          "line": 1025
+        },
+        {
+          "name": "columns",
+          "line": 1026
+        },
+        {
+          "name": "duplicate",
+          "line": 1029
+        },
+        {
+          "name": "AnalysisResult",
+          "line": 1058
+        },
+        {
+          "name": "r",
+          "line": 1066
+        },
+        {
+          "name": "quantile",
+          "line": 1217
+        },
+        {
+          "name": "pos",
+          "line": 1218
+        },
+        {
+          "name": "InteractivePlot",
+          "line": 1225
+        },
+        {
+          "name": "groups",
+          "line": 1236
+        },
+        {
+          "name": "colors",
+          "line": 1237
+        },
+        {
+          "name": "label",
+          "line": 1238
+        },
+        {
+          "name": "data",
+          "line": 1241
+        },
+        {
+          "name": "values",
+          "line": 1299
+        },
+        {
+          "name": "bins",
+          "line": 1302
+        },
+        {
+          "name": "index",
+          "line": 1308
+        },
+        {
+          "name": "key",
+          "line": 1310
+        },
+        {
+          "name": "all",
+          "line": 1346
+        },
+        {
+          "name": "y",
+          "line": 1351
+        },
+        {
+          "name": "v",
+          "line": 1357
+        },
+        {
+          "name": "values",
+          "line": 1389
+        }
+      ],
+      "source_page": "source/33.md"
+    },
+    {
+      "path": "frontend/src/api.ts",
+      "lines": 186,
+      "sha256": "be0d55d3af280b63e8f504a272667c771a71c1fd2957f7a6d06b1f8daa9674b0",
+      "category": "前端",
+      "definitions": [
+        {
+          "name": "Project",
+          "line": 2
+        },
+        {
+          "name": "Paper",
+          "line": 11
+        },
+        {
+          "name": "Citation",
+          "line": 28
+        },
+        {
+          "name": "Job",
+          "line": 36
+        },
+        {
+          "name": "Settings",
+          "line": 44
+        },
+        {
+          "name": "Dataset",
+          "line": 54
+        },
+        {
+          "name": "AnalysisConfig",
+          "line": 68
+        },
+        {
+          "name": "Result",
+          "line": 83
+        },
+        {
+          "name": "Analysis",
+          "line": 110
+        },
+        {
+          "name": "Experiment",
+          "line": 117
+        },
+        {
+          "name": "Report",
+          "line": 129
+        },
+        {
+          "name": "Message",
+          "line": 136
+        },
+        {
+          "name": "Conversation",
+          "line": 142
+        },
+        {
+          "name": "ReadingField",
+          "line": 143
+        },
+        {
+          "name": "fmt",
+          "line": 148
+        },
+        {
+          "name": "date",
+          "line": 149
+        },
+        {
+          "name": "api",
+          "line": 158
+        },
+        {
+          "name": "response",
+          "line": 162
+        },
+        {
+          "name": "message",
+          "line": 170
+        },
+        {
+          "name": "body",
+          "line": 172
+        },
+        {
+          "name": "json",
+          "line": 183
+        }
+      ],
+      "source_page": "source/34.md"
+    },
+    {
+      "path": "frontend/src/components.tsx",
+      "lines": 653,
+      "sha256": "0884bc41bdb0a4cd1116e6807fb85968d2c4cdeadb3d83ab71afbff89aefd130",
+      "category": "前端",
+      "definitions": [
+        {
+          "name": "ReactNode",
+          "line": 10
+        },
+        {
+          "name": "ReactElement",
+          "line": 11
+        },
+        {
+          "name": "Paper",
+          "line": 29
+        },
+        {
+          "name": "Citation",
+          "line": 30
+        },
+        {
+          "name": "ReadingField",
+          "line": 31
+        },
+        {
+          "name": "Badge",
+          "line": 46
+        },
+        {
+          "name": "Empty",
+          "line": 55
+        },
+        {
+          "name": "Spinner",
+          "line": 75
+        },
+        {
+          "name": "Alert",
+          "line": 83
+        },
+        {
+          "name": "Field",
+          "line": 92
+        },
+        {
+          "name": "id",
+          "line": 101
+        },
+        {
+          "name": "nameControls",
+          "line": 102
+        },
+        {
+          "name": "element",
+          "line": 105
+        },
+        {
+          "name": "Modal",
+          "line": 134
+        },
+        {
+          "name": "ref",
+          "line": 145
+        },
+        {
+          "name": "old",
+          "line": 147
+        },
+        {
+          "name": "key",
+          "line": 149
+        },
+        {
+          "name": "list",
+          "line": 152
+        },
+        {
+          "name": "first",
+          "line": 156
+        },
+        {
+          "name": "Citations",
+          "line": 200
+        },
+        {
+          "name": "Evidence",
+          "line": 223
+        },
+        {
+          "name": "Reader",
+          "line": 253
+        },
+        {
+          "name": "canvas",
+          "line": 278
+        },
+        {
+          "name": "doc",
+          "line": 279
+        },
+        {
+          "name": "url",
+          "line": 280
+        },
+        {
+          "name": "cancelled",
+          "line": 282
+        },
+        {
+          "name": "task",
+          "line": 289
+        },
+        {
+          "name": "stopped",
+          "line": 317
+        },
+        {
+          "name": "render",
+          "line": 318
+        },
+        {
+          "name": "d",
+          "line": 320
+        },
+        {
+          "name": "p",
+          "line": 327
+        },
+        {
+          "name": "viewport",
+          "line": 329
+        },
+        {
+          "name": "c",
+          "line": 330
+        },
+        {
+          "name": "context",
+          "line": 333
+        },
+        {
+          "name": "save",
+          "line": 353
+        },
+        {
+          "name": "readingCard",
+          "line": 377
+        },
+        {
+          "name": "r",
+          "line": 380
+        },
+        {
+          "name": "DataTable",
+          "line": 613
+        }
+      ],
+      "source_page": "source/35.md"
+    },
+    {
+      "path": "frontend/src/main.tsx",
+      "lines": 9,
+      "sha256": "b8c1e566187ea5d53bf9b4c2f4cd8fc8193b4958afa219e57d39b76153f4fb20",
+      "category": "前端",
+      "definitions": [],
+      "source_page": "source/36.md"
+    },
+    {
+      "path": "frontend/src/numeric.ts",
+      "lines": 112,
+      "sha256": "e813794a6a09db8924e03a143177f20c45db6aa9b28a9634941537dfb438cde6",
+      "category": "前端",
+      "definitions": [
+        {
+          "name": "formatNumber",
+          "line": 2
+        },
+        {
+          "name": "precision",
+          "line": 8
+        },
+        {
+          "name": "magnitude",
+          "line": 11
+        },
+        {
+          "name": "power",
+          "line": 17
+        },
+        {
+          "name": "HistogramBin",
+          "line": 23
+        },
+        {
+          "name": "Histogram",
+          "line": 31
+        },
+        {
+          "name": "makeHistogram",
+          "line": 45
+        },
+        {
+          "name": "min",
+          "line": 51
+        },
+        {
+          "name": "max",
+          "line": 52
+        },
+        {
+          "name": "total",
+          "line": 53
+        },
+        {
+          "name": "binIndices",
+          "line": 60
+        },
+        {
+          "name": "binCount",
+          "line": 63
+        },
+        {
+          "name": "span",
+          "line": 64
+        },
+        {
+          "name": "scale",
+          "line": 65
+        },
+        {
+          "name": "scaledMin",
+          "line": 66
+        },
+        {
+          "name": "scaledSpan",
+          "line": 67
+        },
+        {
+          "name": "boundary",
+          "line": 68
+        },
+        {
+          "name": "fraction",
+          "line": 71
+        },
+        {
+          "name": "lo",
+          "line": 78
+        },
+        {
+          "name": "hi",
+          "line": 79
+        },
+        {
+          "name": "value",
+          "line": 90
+        },
+        {
+          "name": "index",
+          "line": 92
+        },
+        {
+          "name": "fraction",
+          "line": 98
+        }
+      ],
+      "source_page": "source/37.md"
+    },
+    {
+      "path": "frontend/src/styles.css",
+      "lines": 2665,
+      "sha256": "34b707e6eb1b073aefee82ff2938cfd4da0a17daf55059f24eb41bfe773f410a",
+      "category": "前端",
+      "definitions": [],
+      "source_page": "source/38.md"
+    },
+    {
+      "path": "frontend/src/vite-env.d.ts",
+      "lines": 1,
+      "sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
+      "category": "前端",
+      "definitions": [],
+      "source_page": "source/39.md"
+    },
+    {
+      "path": "frontend/tailwind.config.js",
+      "lines": 5,
+      "sha256": "97de26b7cddbbd9682be48d29adcd55cdb8c22b83df27a4010560ece6de0303d",
+      "category": "配置",
+      "definitions": [],
+      "source_page": "source/40.md"
+    },
+    {
+      "path": "frontend/tests/numeric.spec.ts",
+      "lines": 107,
+      "sha256": "b5f2c42f68a797a18064b5b5315af390d8744aeccacd442f5387879ad9d296ad",
+      "category": "测试",
+      "definitions": [
+        {
+          "name": "nonzero small measurements and p values retain their magnitude",
+          "line": 4
+        },
+        {
+          "name": "displayed",
+          "line": 13
+        },
+        {
+          "name": "ordinary numbers and identifier strings keep readable formatting",
+          "line": 24
+        },
+        {
+          "name": "floating last-edge rounding cannot drop the maximum observation",
+          "line": 36
+        },
+        {
+          "name": "values",
+          "line": 37
+        },
+        {
+          "name": "histogram",
+          "line": 38
+        },
+        {
+          "name": "interior boundaries have one assignment and final boundary is inclusive",
+          "line": 51
+        },
+        {
+          "name": "histogram",
+          "line": 52
+        },
+        {
+          "name": "100000 observations do not use array spread arguments",
+          "line": 57
+        },
+        {
+          "name": "values",
+          "line": 58
+        },
+        {
+          "name": "histogram",
+          "line": 59
+        },
+        {
+          "name": "extreme finite numbers and subnormal ranges remain assigned",
+          "line": 67
+        },
+        {
+          "name": "histogram",
+          "line": 72
+        },
+        {
+          "name": "constant, empty and invalid values are explicit",
+          "line": 89
+        },
+        {
+          "name": "constant",
+          "line": 90
+        },
+        {
+          "name": "mixed",
+          "line": 101
+        }
+      ],
+      "source_page": "source/41.md"
+    },
+    {
+      "path": "frontend/tests/workbench.spec.ts",
+      "lines": 209,
+      "sha256": "66760fa3a976e20bd7bd88fcb63e7a53288fa90b4fcede2ddb8e187ae2958237",
+      "category": "测试",
+      "definitions": [
+        {
+          "name": "root",
+          "line": 5
+        },
+        {
+          "name": "sample",
+          "line": 6
+        },
+        {
+          "name": "createProject",
+          "line": 8
+        },
+        {
+          "name": "dialog",
+          "line": 10
+        },
+        {
+          "name": "nav",
+          "line": 22
+        },
+        {
+          "name": "complete offline research workflow with original PDF and reproducible export",
+          "line": 25
+        },
+        {
+          "name": "reader",
+          "line": 53
+        },
+        {
+          "name": "form",
+          "line": 93
+        },
+        {
+          "name": "computed",
+          "line": 123
+        },
+        {
+          "name": "saved",
+          "line": 129
+        },
+        {
+          "name": "download",
+          "line": 153
+        },
+        {
+          "name": "file",
+          "line": 155
+        },
+        {
+          "name": "archive",
+          "line": 156
+        },
+        {
+          "name": "project switching isolates documents and displays OCR/failure states",
+          "line": 170
+        },
+        {
+          "name": "mobile navigation stays within viewport and opens settings without a model",
+          "line": 191
+        }
+      ],
+      "source_page": "source/42.md"
+    },
+    {
+      "path": "frontend/tsconfig.json",
+      "lines": 17,
+      "sha256": "073d540e5cbb79b62d8709aa1ba04fd8f8a2a69e78965c8602ce4e18c1e4ef24",
+      "category": "配置",
+      "definitions": [],
+      "source_page": "source/43.md"
+    },
+    {
+      "path": "frontend/vite.config.ts",
+      "lines": 11,
+      "sha256": "0e1d15497e2c758068862ae56c047d3ca66ebf62dcba8fbdb194c53114e0e42b",
+      "category": "配置",
+      "definitions": [],
+      "source_page": "source/44.md"
+    },
+    {
+      "path": "pyproject.toml",
+      "lines": 10,
+      "sha256": "f0785a8cc93a8f4f4250ea66a04466b0eae25776c6df367107cf09f79ca97283",
+      "category": "配置",
+      "definitions": [],
+      "source_page": "source/45.md"
+    },
+    {
+      "path": "requirements.lock.txt",
+      "lines": 50,
+      "sha256": "6ee3205174d144c555e038e1075576eea01ec47943174c991401409b17a64d2f",
+      "category": "依赖锁文件",
+      "definitions": [],
+      "source_page": "source/46.md"
+    },
+    {
+      "path": "requirements.txt",
+      "lines": 2,
+      "sha256": "8ba39fab0d91ae2740c871825f2f895d6fa1558f740c06184b85a2107a20610a",
+      "category": "配置",
+      "definitions": [],
+      "source_page": "source/47.md"
+    },
+    {
+      "path": "samples/duplicate_pairs.csv",
+      "lines": 12,
+      "sha256": "b8e28d34403f7a3f8dd84e27e459879bfbf73ee2472084871f90ae88ac411e81",
+      "category": "测试数据",
+      "definitions": [],
+      "source_page": "source/48.md"
+    },
+    {
+      "path": "samples/expected_results.json",
+      "lines": 105,
+      "sha256": "f9b5982875cccc9fbc7ee45ba616b624615b5af219447838f2e8e0e52b8fa224",
+      "category": "测试数据",
+      "definitions": [],
+      "source_page": "source/49.md"
+    },
+    {
+      "path": "samples/independent.csv",
+      "lines": 11,
+      "sha256": "3fdf7f6f1ef5e5e4d77c4c4a0cd3da5b91102f6f4ca4756c100c14ac609eea3a",
+      "category": "测试数据",
+      "definitions": [],
+      "source_page": "source/50.md"
+    },
+    {
+      "path": "samples/missing_values.csv",
+      "lines": 9,
+      "sha256": "a5419b6aa83486ae612cda7941c526a9e5b61813ff271c6a32a3063a93419165",
+      "category": "测试数据",
+      "definitions": [],
+      "source_page": "source/51.md"
+    },
+    {
+      "path": "samples/paired.csv",
+      "lines": 11,
+      "sha256": "a17dbaf84951e77c606165f3265fab6426c7cb68df7788b70d039dc22fd21867",
+      "category": "测试数据",
+      "definitions": [],
+      "source_page": "source/52.md"
+    },
+    {
+      "path": "samples/unmatched_pairs.csv",
+      "lines": 10,
+      "sha256": "b4b5080ec0c05faada8f6a739af7ecd2247055301510fa3b16b8953c335bb452",
+      "category": "测试数据",
+      "definitions": [],
+      "source_page": "source/53.md"
+    },
+    {
+      "path": "scripts/common.ps1",
+      "lines": 65,
+      "sha256": "5719b9169e8cfa937ae5ce22a5ae33da8edaf1a22bd38a4fce4da9439c6eb29d",
+      "category": "脚本",
+      "definitions": [
+        {
+          "name": "Assert-NativeExit",
+          "line": 5
+        },
+        {
+          "name": "Find-WorkbenchPython",
+          "line": 10
+        },
+        {
+          "name": "Find-WorkbenchNode",
+          "line": 41
+        },
+        {
+          "name": "Find-WorkbenchNpm",
+          "line": 51
+        },
+        {
+          "name": "Get-WorkbenchVenvPython",
+          "line": 59
+        }
+      ],
+      "source_page": "source/54.md"
+    },
+    {
+      "path": "scripts/dev.ps1",
+      "lines": 33,
+      "sha256": "891271918f5f8fbc15793929ced43816514882025f2a7636e4f66a5288549a1a",
+      "category": "脚本",
+      "definitions": [],
+      "source_page": "source/55.md"
+    },
+    {
+      "path": "scripts/generate_samples.py",
+      "lines": 285,
+      "sha256": "dee2b21a8746b0ce863c05c7cae4689435849e17136565a41309cea83d95a805",
+      "category": "脚本",
+      "definitions": [
+        {
+          "name": "write_csv",
+          "line": 55,
+          "end": 59
+        },
+        {
+          "name": "make_paper",
+          "line": 61,
+          "end": 121
+        },
+        {
+          "name": "make_paper.footer",
+          "line": 110,
+          "end": 116
+        },
+        {
+          "name": "make_scanned",
+          "line": 123,
+          "end": 141
+        },
+        {
+          "name": "make_workbook",
+          "line": 143,
+          "end": 187
+        },
+        {
+          "name": "expected_results",
+          "line": 189,
+          "end": 238
+        },
+        {
+          "name": "main",
+          "line": 240,
+          "end": 282
+        }
+      ],
+      "source_page": "source/56.md"
+    },
+    {
+      "path": "scripts/setup.ps1",
+      "lines": 43,
+      "sha256": "fb28a7d53b90fe0ae78d82a55bcc6df56fb6f754c3334405a0ae9dcc0836cb85",
+      "category": "脚本",
+      "definitions": [],
+      "source_page": "source/57.md"
+    },
+    {
+      "path": "scripts/start.ps1",
+      "lines": 13,
+      "sha256": "8178830e14891a7a54a71e890bf54aa2813b31de16589db427cc66ebd5b2a1e4",
+      "category": "脚本",
+      "definitions": [],
+      "source_page": "source/58.md"
+    },
+    {
+      "path": "scripts/test.ps1",
+      "lines": 25,
+      "sha256": "5e4a820ecc0e836d647ce07aa660172614d8ddeca781ab90bf143b50c82155b7",
+      "category": "脚本",
+      "definitions": [],
+      "source_page": "source/59.md"
+    },
+    {
+      "path": "scripts/verify_reproduction.py",
+      "lines": 69,
+      "sha256": "24d776a1c5442ddcad826fb9a79e2026196c4ebb218ac1cb3f3046df247a8966",
+      "category": "脚本",
+      "definitions": [
+        {
+          "name": "main",
+          "line": 22,
+          "end": 66
+        }
+      ],
+      "source_page": "source/60.md"
+    }
+  ]
+}
